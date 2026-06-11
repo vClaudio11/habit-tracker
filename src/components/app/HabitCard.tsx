@@ -67,21 +67,31 @@ export function HabitTodoCard({ habits }: HabitCardProps) {
     )
 }
 
+const INITIAL_FORM_STATE: Habit = {
+  id: "",
+  title: "",
+  type: "Health", 
+};
+
 export function HabitCreateCard({ onAdd }: HabitCardProps) {
-    const [card, setCard] = useState<Habit>({
-        id: '',
-        title: '',
-        description: '',
-        type: ''
-    })
+    const [card, setCard] = useState<Habit>(INITIAL_FORM_STATE)
+
+    const handleReset = () => {
+        setCard(INITIAL_FORM_STATE)
+    }
+
 
     return (
         <div>
-            <Field className="flex flex-col gap-2">
+            <Field className="flex flex-col gap-4">
                 <Field>    
                     <Label>Habit title</Label>
                     <InputGroup className='h-8'>
-                        <InputGroupInput placeholder="Enter title" value={card.title}></InputGroupInput>
+                        <InputGroupInput 
+                            placeholder="Enter title" 
+                            onChange={(e) => setCard({ ...card, title: e.target.value})}
+                            value={card.title}>
+                        </InputGroupInput>
                     </InputGroup>
                 </Field>
                 <div>
@@ -109,6 +119,7 @@ export function HabitCreateCard({ onAdd }: HabitCardProps) {
                     <Label>Description</Label>
                     <Textarea 
                         value={card.description || ""}
+                        onChange={(e) => setCard({ ...card, description: e.target.value})}
                         placeholder="Enter text"
                         className="h-30"
                     />
@@ -116,9 +127,12 @@ export function HabitCreateCard({ onAdd }: HabitCardProps) {
                 <Field className="flex flex-row items-center gap-2">
                     <Button 
                         className='max-w-28'
+                        type="submit"
                         variant='outline'>Create habit</Button>
                     <Button 
                         className='max-w-18'
+                        type="button"
+                        onClick={handleReset}
                         variant='outline'>Clear</Button>
                 </Field>
             </Field>
