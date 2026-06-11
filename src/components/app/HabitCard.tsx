@@ -1,4 +1,4 @@
-import { Habit } from "@/types"
+import type { Habit, NoteType } from "@/types"
 import { useState } from "react"
 
 // HabitTodoCard components
@@ -22,9 +22,19 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
 
 interface HabitCardProps {
-    card: Habit
     habits: Habit
     onAdd: Habit 
     onDelete: string 
@@ -58,15 +68,59 @@ export function HabitTodoCard({ habits }: HabitCardProps) {
 }
 
 export function HabitCreateCard({ onAdd }: HabitCardProps) {
-    const [card, setCard] = useState<Habit[]>([])
+    const [card, setCard] = useState<Habit>({
+        id: '',
+        title: '',
+        description: '',
+        type: ''
+    })
 
     return (
         <div>
-            <Field>
-                <FieldLabel>Habit Title</FieldLabel>
-                <InputGroup className='h-8'>
-                    <InputGroupInput placeholder="Enter title" value={card.title}></InputGroupInput>
-                </InputGroup>
+            <Field className="flex flex-col gap-2">
+                <Field>    
+                    <Label>Habit title</Label>
+                    <InputGroup className='h-8'>
+                        <InputGroupInput placeholder="Enter title" value={card.title}></InputGroupInput>
+                    </InputGroup>
+                </Field>
+                <div>
+                    <Select
+                        value={card.type}
+                        onValueChange={(value: NoteType | null) => {
+                            if (value) {
+                                setCard(prev => ({...prev, type: value}))}
+                            }
+                        }
+                    >
+                        <SelectTrigger className="w-full max-w-48">
+                            <SelectValue placeholder='Select habit type'/>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value='Health'>Health</SelectItem>
+                                <SelectItem value='Education'>Education</SelectItem>
+                                <SelectItem value='Finance'>Finance</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <Field>    
+                    <Label>Description</Label>
+                    <Textarea 
+                        value={card.description || ""}
+                        placeholder="Enter text"
+                        className="h-30"
+                    />
+                </Field>
+                <Field className="flex flex-row items-center gap-2">
+                    <Button 
+                        className='max-w-28'
+                        variant='outline'>Create habit</Button>
+                    <Button 
+                        className='max-w-18'
+                        variant='outline'>Clear</Button>
+                </Field>
             </Field>
         </div>
     )
