@@ -3,7 +3,11 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { useReducer } from "react"
 import { Habit } from "./types"
-import { HabitCreateCard, HabitEditCard, HabitTodoCard } from "./components/app/HabitCard"
+import { HabitCreateCard } from "./components/app/HabitCards/HabitCardCreate"
+import { HabitTodoCard } from "./components/app/HabitCards/HabitCardTodo"
+import { HabitEditCard } from "./components/app/HabitCards/HabitCardEdit"
+
+
 import {
   Card,
   CardContent,
@@ -27,6 +31,14 @@ import {
   FieldTitle,
 } from "@/components/ui/field"
 import { Label } from "@/components/ui/label"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 
 type HabitAction = { type: "ADD_HABIT", payload: Habit} | { type: "DELETE_HABIT", payload: string}
@@ -56,7 +68,7 @@ function App() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       {/* Tabs component */}
-      <Tabs defaultValue='To-do' className='w-[400px]'>
+      <Tabs defaultValue='To-do' className='w-100'>
           <TabsList>
               <TabsTrigger value='to-do'>To-do</TabsTrigger>
               <TabsTrigger value='create'>Create</TabsTrigger>
@@ -69,6 +81,13 @@ function App() {
                       - control overflow-y to auto for scroll of to-do, overflow hidden
                     */}
                     <FieldGroup className='min-h-78'>
+                      <Table>
+                        <TableRow>
+                            <TableHead>Habit</TableHead>
+                            <TableHead>Description</TableHead>
+                            <TableHead>Type</TableHead>
+                        </TableRow>
+                      </Table>
                       {habits.map(habit => (
                         <HabitTodoCard habits={habit}/>
                       ))}
@@ -92,7 +111,7 @@ function App() {
                     {/* Card list of all active habits, with edit and delete button */}
                     <FieldGroup className='min-h-78'>      
                       {habits.map(habit => (
-                        <HabitEditCard key={habit.id} habit={habit} onDelete={handleDelete}/>
+                        <HabitEditCard key={habit.id} onDelete={handleDelete}/>
                       ))}
                     </FieldGroup>
                   </CardHeader>
