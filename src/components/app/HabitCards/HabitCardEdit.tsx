@@ -22,7 +22,7 @@ export function HabitEditCard({ onDelete, habits }: HabitCardProps) {
     
 
     return (
-        <div>
+        <div className="gap-4">
             <Card size="sm" className="mx-auto w-full max-w-sm">
                 <CardHeader>
                     <div className="flex flex-row justify-between items-center">

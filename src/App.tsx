@@ -106,15 +106,15 @@ function App() {
               </Card>
           </TabsContent>
           <TabsContent value='edit'>
-              <Card>
-                  <CardHeader>
+              <Card className="max-h-86 overflow-y-auto">
+                <CardContent>
+                  <Field>
                     {/* Card list of all active habits, with edit and delete button */}
-                    <FieldGroup className='min-h-78'>      
                       {habits.map(habit => (
                         <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete}/>
-                      ))}
-                    </FieldGroup>
-                  </CardHeader>
+                      ))}                
+                  </Field>
+                </CardContent>
               </Card>
           </TabsContent>
       </Tabs>
