@@ -80,7 +80,7 @@ function App() {
                     {/* Checkbox table of habits
                       - control overflow-y to auto for scroll of to-do, overflow hidden
                     */}
-                    <FieldGroup className='min-h-78'>
+                    <FieldGroup className='min-h-82'>
                       <Table>
                         <TableRow>
                             <TableHead>Habit</TableHead>
@@ -99,16 +99,16 @@ function App() {
               <Card>
                   <CardHeader>
                     {/* TextArea field for Title, select tabs for type, TextArea for description */}
-                    <FieldGroup className='min-h-78'>
+                    <FieldGroup className='min-h-82'>
                       <HabitCreateCard onAdd={handleAdd}/>
                     </FieldGroup>
                   </CardHeader>
               </Card>
           </TabsContent>
           <TabsContent value='edit'>
-              <Card className="max-h-86 overflow-y-auto">
+              <Card className="min-h-90 max-h-90 overflow-y-auto">
                 <CardContent>
-                  <Field>
+                  <Field className="gap-y-4">
                     {/* Card list of all active habits, with edit and delete button */}
                       {habits.map(habit => (
                         <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete}/>

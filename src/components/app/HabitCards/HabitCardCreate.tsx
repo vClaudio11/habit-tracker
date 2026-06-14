@@ -90,7 +90,7 @@ export function HabitCreateCard({ onAdd }: HabitCardProps) {
                             className="h-30"
                         />
                     </Field>
-                    <Field className="flex flex-row items-center gap-2">
+                    <Field className="flex flex-row items-center gap-2 mt-2">
                         <Button 
                             className='max-w-28'
                             type="submit"

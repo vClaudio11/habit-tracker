@@ -20,14 +20,20 @@ interface HabitCardProps {
 export function HabitEditCard({ onDelete, habits }: HabitCardProps) {
     const [edit, setEdit] = useState(false)
     
+    function deleteHabit() {
+        onDelete(habits.id)
+    }
 
     return (
-        <div className="gap-4">
+        <div>
             <Card size="sm" className="mx-auto w-full max-w-sm">
                 <CardHeader>
                     <div className="flex flex-row justify-between items-center">
                         <CardTitle>{habits.title}</CardTitle>
-                        <TrashIcon className="text-red-500"></TrashIcon>
+                        <TrashIcon 
+                            onClick={deleteHabit}
+                            className="text-red-500 hover:cursor-pointer">
+                        </TrashIcon>
                     </div>
                     <CardDescription>
                         {habits.type}
