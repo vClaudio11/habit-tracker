@@ -40,8 +40,10 @@ export function HabitCreateCard({ onAdd }: HabitCardProps) {
         setCard(INITIAL_FORM_STATE)
     }
 
-    function handleAdd({ onAdd }: HabitCardProps) {
+    function handleAdd(e: React.SubmitEvent<HTMLFormElement>) {
+        e.preventDefault()
         onAdd({...card, id:crypto.randomUUID()})
+        handleReset()
     }
 
     return (

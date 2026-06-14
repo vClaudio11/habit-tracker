@@ -89,7 +89,7 @@ function App() {
                         </TableRow>
                       </Table>
                       {habits.map(habit => (
-                        <HabitTodoCard habits={habit}/>
+                        <HabitTodoCard key={habit.id} habits={habit}/>
                       ))}
                     </FieldGroup>
                   </CardHeader>
@@ -111,7 +111,7 @@ function App() {
                     {/* Card list of all active habits, with edit and delete button */}
                     <FieldGroup className='min-h-78'>      
                       {habits.map(habit => (
-                        <HabitEditCard key={habit.id} onDelete={handleDelete}/>
+                        <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete}/>
                       ))}
                     </FieldGroup>
                   </CardHeader>

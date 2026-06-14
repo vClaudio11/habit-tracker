@@ -1,13 +1,16 @@
 import type { Habit, NoteType } from "@/types"
 import { useState } from "react"
+import { TrashIcon } from "@/components/icons/heroicons-trash"
 
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button"
 import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldTitle,
-} from "@/components/ui/field"
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 interface HabitCardProps {
     onDelete: (id: string) => void
@@ -20,15 +23,23 @@ export function HabitEditCard({ onDelete, habits }: HabitCardProps) {
 
     return (
         <div>
-            <Field orientation="horizontal">
-                <Checkbox id="toggle-checkbox-2" name="toggle-checkbox-2" />
-                <FieldContent>
-                    <FieldTitle>{habits.title}</FieldTitle>
-                    <FieldDescription>
-                        {habits.description}
-                    </FieldDescription>
-                </FieldContent>
-            </Field>
+            <Card size="sm" className="mx-auto w-full max-w-sm">
+                <CardHeader>
+                    <div className="flex flex-row justify-between items-center">
+                        <CardTitle>{habits.title}</CardTitle>
+                        <TrashIcon className="text-red-500"></TrashIcon>
+                    </div>
+                    <CardDescription>
+                        {habits.type}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <p>{habits.description}</p>
+                </CardContent>
+                <CardFooter className="flex flex-row min-w-max">
+                    <Button variant="outline" size="sm" className="w-full">Edit</Button>
+                </CardFooter>
+            </Card>
         </div>
     )
 }
