@@ -75,22 +75,27 @@ function App() {
               <TabsTrigger value='edit'>Edit</TabsTrigger>
           </TabsList>
           <TabsContent value='to-do'>
-              <Card>
+              <Card className="overflow-y-auto">
                   <CardHeader>
                     {/* Checkbox table of habits
                       - control overflow-y to auto for scroll of to-do, overflow hidden
                     */}
                     <FieldGroup className='min-h-82'>
-                      <Table>
-                        <TableRow>
-                            <TableHead>Habit</TableHead>
-                            <TableHead>Description</TableHead>
-                            <TableHead>Type</TableHead>
-                        </TableRow>
+                      <Table className="table-fixed w-full">
+                        <TableHeader>
+                          <TableRow>
+                              <TableHead className='w-[70%]'>Habit</TableHead>
+                              <TableHead className='w-[30%]'>Type</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                      <TableBody>
+                        {habits.map(habit => (
+                          <TableRow key={habit.id}>
+                              <HabitTodoCard habits={habit}/>
+                          </TableRow>
+                          ))}
+                        </TableBody>
                       </Table>
-                      {habits.map(habit => (
-                        <HabitTodoCard key={habit.id} habits={habit}/>
-                      ))}
                     </FieldGroup>
                   </CardHeader>
               </Card>
