@@ -26,7 +26,11 @@ import {
   Field,
 } from "@/components/ui/field"
 
-import { Input } from "@base-ui/react"
+import {
+  InputGroup,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { Label } from "@/components/ui/label"
 
 interface HabitCardProps {
     onDelete: (id: string) => void
@@ -92,14 +96,20 @@ export function HabitEditCard({ onDelete, onEdit, habits }: HabitCardProps) {
             : 
                 <Card>
                     <form onSubmit={handleEdit}>
-                        <CardHeader>
-                            <Input 
-                                value={card.title}
-                                onChange={(e) => setCard({...card, title: e.target.value})}
-                                />
-                        </CardHeader>
-                        <CardContent>
-                            <Field>
+                        <Field className="flex flex-col gap-4">
+                            <CardHeader>
+                                <Field>
+                                    <Label>Habit title</Label>
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            value={card.title}
+                                            onChange={(e) => setCard({...card, title: e.target.value})}
+                                        >                                    
+                                        </InputGroupInput>
+                                    </InputGroup>
+                                </Field>
+                            </CardHeader>
+                            <CardContent className="flex flex-col gap-4">                            
                                 <Select
                                     value={card.type}
                                     onValueChange={(value: NoteType | null) => {
@@ -119,31 +129,32 @@ export function HabitEditCard({ onDelete, onEdit, habits }: HabitCardProps) {
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
-                            </Field>
-                            <Field>
-                                <Textarea
-                                    value={card.description || ""}
-                                    onChange={(e) => setCard({...card, description: e.target.value})}
-                                    className="h-30"
-                                >
-                                    {habits.description}
-                                </Textarea>
-                            </Field>
-                        </CardContent>
-                        <CardFooter className="flex flex-row min-w-max">
-                            <Button 
-                                variant="outline" size="sm" 
-                                type="submit"
-                                className="w-full">
-                                Submit changes
-                            </Button>
-                            <Button 
-                                variant="outline" size="sm" 
-                                onClick={changeEdit}
-                                className="w-full">
-                                Cancel
-                            </Button>
-                        </CardFooter>
+                                <Field>
+                                    <Label>Description</Label>
+                                    <Textarea
+                                        value={card.description || ""}
+                                        onChange={(e) => setCard({...card, description: e.target.value})}
+                                        className="h-30"
+                                    >
+                                        {habits.description}
+                                    </Textarea>                            
+                                </Field>
+                            </CardContent>
+                            <CardFooter className="flex flex-row min-w-max gap-2">
+                                <Button 
+                                    variant="outline" size="sm" 
+                                    type="submit"
+                                    className="w-2/3">
+                                    Submit changes
+                                </Button>
+                                <Button 
+                                    variant="outline" size="sm" 
+                                    onClick={changeEdit}
+                                    className="w-1/3">
+                                    Cancel
+                                </Button>
+                            </CardFooter>
+                        </Field>
                     </form>
                 </Card>
             }
