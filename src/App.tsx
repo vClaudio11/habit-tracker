@@ -33,7 +33,8 @@ import {
 
 type HabitAction = { type: "ADD_HABIT", payload: Habit} | 
                     { type: "DELETE_HABIT", payload: string} | 
-                    { type: "EDIT_HABIT", payload: Habit}
+                    { type: "EDIT_HABIT", payload: Habit} |
+                    { type: "TOGGLE_HABIT", payload: string}
 
 function habitReducer(state: Habit[], action: HabitAction): Habit[] {
   switch (action.type) {
@@ -43,7 +44,9 @@ function habitReducer(state: Habit[], action: HabitAction): Habit[] {
       return state.filter(h => h.id !== action.payload)
     case "EDIT_HABIT":
       return state.map(h => h.id === action.payload.id ? action.payload : h)
-    default:
+    case "TOGGLE_HABIT":
+      return state.map(h => h.id === action.payload ? { ...h, completed: !h.completed} : h)
+      default:
       return state
     }
   }
@@ -61,6 +64,10 @@ function App() {
 
   function handleEdit(habit: Habit) {
     dispatch({ type: "EDIT_HABIT", payload: habit})
+  }
+
+  function toggleHabit(id: string) {
+    dispatch({ type: "TOGGLE_HABIT", payload: id})
   }
 
   return (
@@ -89,7 +96,7 @@ function App() {
                       <TableBody>
                         {habits.map(habit => (
                           <TableRow key={habit.id}>
-                              <HabitTodoCard habits={habit}/>
+                              <HabitTodoCard habits={habit} onToggle={toggleHabit}/>
                           </TableRow>
                           ))}
                         </TableBody>

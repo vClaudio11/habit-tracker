@@ -5,4 +5,5 @@ export interface Habit {
     title: string
     type: NoteType
     description: string
+    completed: boolean
 }
