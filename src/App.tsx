@@ -41,7 +41,9 @@ import {
 } from "@/components/ui/table"
 
 
-type HabitAction = { type: "ADD_HABIT", payload: Habit} | { type: "DELETE_HABIT", payload: string}
+type HabitAction = { type: "ADD_HABIT", payload: Habit} | 
+                    { type: "DELETE_HABIT", payload: string} | 
+                    { type: "EDIT_HABIT", payload: Habit}
 
 function habitReducer(state: Habit[], action: HabitAction): Habit[] {
   switch (action.type) {
@@ -49,6 +51,8 @@ function habitReducer(state: Habit[], action: HabitAction): Habit[] {
       return [action.payload, ...state]
     case "DELETE_HABIT":
       return state.filter(h => h.id !== action.payload)
+    case "EDIT_HABIT":
+      return state.map(h => h.id === action.payload.id ? action.payload : h)
     default:
       return state
     }
@@ -63,6 +67,10 @@ function App() {
 
   function handleDelete(id: string) {
     dispatch({ type: "DELETE_HABIT", payload: id})
+  }
+
+  function handleEdit(habit: Habit) {
+    dispatch({ type: "EDIT_HABIT", payload: habit})
   }
 
   return (
@@ -116,7 +124,7 @@ function App() {
                   <Field className="gap-y-4">
                     {/* Card list of all active habits, with edit and delete button */}
                       {habits.map(habit => (
-                        <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete}/>
+                        <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete} onEdit={handleEdit}/>
                       ))}                
                   </Field>
                 </CardContent>
