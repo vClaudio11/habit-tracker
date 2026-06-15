@@ -1,20 +1,8 @@
 import { Habit } from "@/types"
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldLabel,
-} from "@/components/ui/field"
-
 // use checkbox table for layout
 import { Checkbox } from "@/components/ui/checkbox"
 import {
-  Table,
-  TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from "@/components/ui/table"
 
 interface HabitCardProps {

@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
 import { useReducer } from "react"
 import { Habit } from "./types"
 import { HabitCreateCard } from "./components/app/HabitCards/HabitCardCreate"
@@ -11,9 +8,7 @@ import { HabitEditCard } from "./components/app/HabitCards/HabitCardEdit"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
 import {
   Tabs,
@@ -21,20 +16,15 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { Checkbox } from "@/components/ui/checkbox"
+
 import {
   Field,
-  FieldContent,
-  FieldDescription,
   FieldGroup,
-  FieldLabel,
-  FieldTitle,
 } from "@/components/ui/field"
-import { Label } from "@/components/ui/label"
+
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
