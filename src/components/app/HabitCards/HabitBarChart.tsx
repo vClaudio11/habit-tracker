@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { DailyLog } from "@/types";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
+import { BarChart, Bar, XAxis, CartesianGrid } from "recharts"
 
 interface BarChartProps {
     weeklyLog: DailyLog[]
