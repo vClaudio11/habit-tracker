@@ -62,7 +62,30 @@ function App() {
   const total = habits.length
   const [weeklyLog, setWeeklyLog] = useState<DailyLog[]>(() => {
     const stored = localStorage.getItem("weeklyLog")
-    return stored ? JSON.parse(stored) : []
+    const seeded = localStorage.getItem("weeklyLogSeeded")
+    
+    if (stored && seeded) return JSON.parse(stored)
+    
+    // Populate weekly log with empty habits or 0 habits
+    const today = new Date()
+    const seed = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(today)
+      date.setDate(today.getDate() - (6 - i))
+      return {
+        date: date.toISOString().split("T")[0],
+        completed: 0,
+        total: 0
+      }
+    })
+
+    // Merge existing data on top of the seeded
+    const existing = stored ? JSON.parse(stored) : []
+    const merged = seed.map(day => 
+      existing.find((d: DailyLog) => d.date === day.date) || day
+    )
+
+    localStorage.setItem("weeklyLogSeeded", "true")
+    return merged
   })
 
   useEffect(() => {
@@ -119,6 +142,7 @@ function App() {
         {/* Radial chart */}
           <HabitRadialChart completed={completed} total={total}/>   
         {/* Bar chart */}
+          <HabitBarChart weeklyLog={weeklyLog}/>
       </div>
       {/* Tabs component */}
       <Tabs defaultValue='To-do' className='w-100'>
