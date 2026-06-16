@@ -13,17 +13,17 @@ interface RadialChartProps {
     total: number
 }
 
+const chartConfig = {
+    habits: {
+        label: "habits",
+        color: "#6366f1"
+    }
+}   satisfies ChartConfig
+
 export default function HabitRadialChart({completed, total}: RadialChartProps) {
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
     const chartData = [{ value: percentage, fill: "#6366f1"}]
     const finalAngle = 90 - (360 * (percentage / 100))
-    
-    const chartConfig = {
-        habits: {
-            label: "habits",
-            color: "#6366f1"
-        }
-    }   satisfies ChartConfig
     
     return (
         <div className="w-full">
@@ -93,11 +93,9 @@ export default function HabitRadialChart({completed, total}: RadialChartProps) {
                     </CardContent>
                     <CardFooter className="flex-col gap-2 text-sm text-center">
                         <div className="flex items-center">
-                            {percentage === 100 ? (
-                                 "Daily habits completed" 
-                            ) : (
-                                `${total - completed} habit left to go`
-                            )}
+                            {total === 0 ? "No habits created yet"
+                            : percentage === 100 ? "Daily habits completed"
+                            : `${total - completed} habit${total - completed === 1 ? "" : "s"} left to go`}                         
                         </div>
                     </CardFooter>
             </Card>

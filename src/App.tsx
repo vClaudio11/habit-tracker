@@ -33,6 +33,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import HabitRadialChart from "./components/app/HabitCards/HabitRadialChart"
+import HabitBarChart from "./components/app/HabitCards/HabitBarChart"
 
 
 type HabitAction = { type: "ADD_HABIT", payload: Habit} | 
@@ -118,7 +119,6 @@ function App() {
         {/* Radial chart */}
           <HabitRadialChart completed={completed} total={total}/>   
         {/* Bar chart */}
-        
       </div>
       {/* Tabs component */}
       <Tabs defaultValue='To-do' className='w-100'>
