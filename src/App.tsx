@@ -1,5 +1,5 @@
-import { useReducer } from "react"
-import { Habit } from "./types"
+import { useReducer, useState, useEffect } from "react"
+import { Habit, DailyLog } from "./types"
 import { HabitCreateCard } from "./components/app/HabitCards/HabitCardCreate"
 import { HabitTodoCard } from "./components/app/HabitCards/HabitCardTodo"
 import { HabitEditCard } from "./components/app/HabitCards/HabitCardEdit"
@@ -8,7 +8,10 @@ import { HabitEditCard } from "./components/app/HabitCards/HabitCardEdit"
 import {
   Card,
   CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
+  CardTitle,
 } from "@/components/ui/card"
 import {
   Tabs,
@@ -29,6 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import HabitRadialChart from "./components/app/HabitCards/HabitRadialChart"
 
 
 type HabitAction = { type: "ADD_HABIT", payload: Habit} | 
@@ -53,6 +57,20 @@ function habitReducer(state: Habit[], action: HabitAction): Habit[] {
 
 function App() {
   const [habits, dispatch] = useReducer(habitReducer, [])
+  const completed = habits.filter(h => h.completed).length
+  const total = habits.length
+  const [weeklyLog, setWeeklyLog] = useState<DailyLog[]>(() => {
+    const stored = localStorage.getItem("weeklyLog")
+    return stored ? JSON.parse(stored) : []
+  })
+
+  useEffect(() => {
+    localStorage.setItem("weeklyLog", JSON.stringify(weeklyLog))
+  }, [weeklyLog])
+
+  useEffect(() => {
+    localStorage.setItem("habits", JSON.stringify(habits))
+  }, [habits])
   
   function handleAdd(habit: Habit) {
     dispatch({ type: "ADD_HABIT", payload: habit})
@@ -68,10 +86,40 @@ function App() {
 
   function toggleHabit(id: string) {
     dispatch({ type: "TOGGLE_HABIT", payload: id})
+    
+    // calculate number of completed before state loads
+    const isCurrentlyCompleted = habits.find(h => h.id === id)?.completed
+    const newCompleted = isCurrentlyCompleted
+      ? habits.filter(h => h.completed).length -1
+      : habits.filter(h => h.completed).length + 1
+
+    updateLog(newCompleted, habits.length)
+  }
+
+
+  function updateLog(completed: number, total: number) {
+    const today = new Date().toISOString().split("T")[0]
+
+    setWeeklyLog(prev => {
+      const existing = prev.findIndex(d => d.date === today)
+      if (existing !== -1) {
+        const updated = [...prev]
+        updated[existing] = { date: today, completed: completed, total: total}
+        return updated
+      }
+      return [... prev, { date: today, completed: completed, total: total}].slice(-7)
+    })
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      {/* Charts */}
+      <div className="grid grid-cols-2 gap-6 w-full">
+        {/* Radial chart */}
+          <HabitRadialChart completed={completed} total={total}/>   
+        {/* Bar chart */}
+        
+      </div>
       {/* Tabs component */}
       <Tabs defaultValue='To-do' className='w-100'>
           <TabsList>
@@ -79,12 +127,10 @@ function App() {
               <TabsTrigger value='create'>Create</TabsTrigger>
               <TabsTrigger value='edit'>Edit</TabsTrigger>
           </TabsList>
+          {/* To-do tab */}
           <TabsContent value='to-do'>
               <Card className="overflow-y-auto">
                   <CardHeader>
-                    {/* Checkbox table of habits
-                      - control overflow-y to auto for scroll of to-do, overflow hidden
-                    */}
                     <FieldGroup className='min-h-82'>
                       <Table className="table-fixed w-full">
                         <TableHeader>
@@ -105,6 +151,7 @@ function App() {
                   </CardHeader>
               </Card>
           </TabsContent>
+          {/* Create tab */}
           <TabsContent value='create'>
               <Card>
                   <CardHeader>
@@ -115,6 +162,7 @@ function App() {
                   </CardHeader>
               </Card>
           </TabsContent>
+          {/* Edit tab */}
           <TabsContent value='edit'>
               <Card className="min-h-90 max-h-90 overflow-y-auto">
                 <CardContent>

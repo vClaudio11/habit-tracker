@@ -31,6 +31,7 @@ const INITIAL_FORM_STATE: Habit = {
   title: "",
   description: "",
   type: null, 
+  completed: false
 };
 
 export function HabitCreateCard({ onAdd }: HabitCardProps) {

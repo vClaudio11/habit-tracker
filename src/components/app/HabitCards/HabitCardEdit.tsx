@@ -45,6 +45,7 @@ export function HabitEditCard({ onDelete, onEdit, habits }: HabitCardProps) {
         title: habits.title,
         description: habits.description,
         type: habits.type,
+        completed: false
     };
 
     const [edit, setEdit] = useState(false)
