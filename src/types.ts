@@ -7,3 +7,9 @@ export interface Habit {
     description: string
     completed: boolean
 }
+
+export interface DailyLog {
+    date: string
+    completed: number
+    total: number
+}
