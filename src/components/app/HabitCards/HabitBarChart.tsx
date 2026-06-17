@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { DailyLog } from "@/types";
 import { BarChart, Bar, XAxis, CartesianGrid } from "recharts"
@@ -28,7 +28,7 @@ export default function HabitBarChart({ weeklyLog }: BarChartProps) {
                     <CardDescription>Completed habits for the last week</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={chartConfig}>
+                    <ChartContainer config={chartConfig} className="h-[160px] w-full">
                         <BarChart accessibilityLayer data={chartData}>
                             <CartesianGrid vertical={false} />
                             <XAxis
@@ -46,6 +46,11 @@ export default function HabitBarChart({ weeklyLog }: BarChartProps) {
                         </BarChart>
                     </ChartContainer>
                 </CardContent>
+                <CardFooter className="flex-col text-sm text-center">
+                    <div className="flex items-center text-muted-foreground">
+                        Last 7 days
+                    </div>
+                </CardFooter>
             </Card>
         </div>
     )

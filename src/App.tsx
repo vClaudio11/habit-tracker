@@ -155,70 +155,84 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {/* Charts */}
-      <div className="grid grid-cols-2 gap-6 w-full">
-        {/* Radial chart */}
-          <HabitRadialChart completed={completed} total={total}/>   
-        {/* Bar chart */}
-          <HabitBarChart weeklyLog={weeklyLog}/>
+    <div className="flex flex-col items-center justify-center min-h-screen"> 
+    {/* Hardcode the mobile layout UI */}
+      <div className="w-[390px] h-[844px] overflow-y-hidden overflow-x-hidden rounded-3xl shadow-2xl border border-gray-800 bg-background">
+        <Card>
+          <CardHeader>
+            <CardTitle>Habit tracker</CardTitle>
+            <CardDescription>Log your habits</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* Charts */}
+            <div className="grid grid-cols-2 gap-4 w-full mb-4">
+              {/* Radial chart */}
+                <HabitRadialChart completed={completed} total={total}/>   
+              {/* Bar chart */}
+                <HabitBarChart weeklyLog={weeklyLog}/>
+            </div>
+            {/* Tabs component */}
+            <Tabs defaultValue='To-do' className='w-auto'>
+                <TabsList>
+                    <TabsTrigger value='to-do'>To-do</TabsTrigger>
+                    <TabsTrigger value='create'>Create</TabsTrigger>
+                    <TabsTrigger value='edit'>Edit</TabsTrigger>
+                </TabsList>
+                {/* To-do tab */}
+                <TabsContent value='to-do'>
+                    <Card className="overflow-y-auto">
+                        <CardHeader>
+                          <FieldGroup className='min-h-82'>
+                            <Table className="table-fixed w-full">
+                              <TableHeader>
+                                <TableRow>
+                                    <TableHead className='w-[70%]'>Habit</TableHead>
+                                    <TableHead className='w-[30%]'>Type</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                            <TableBody>
+                              {habits.map(habit => (
+                                <TableRow key={habit.id}>
+                                    <HabitTodoCard habits={habit} onToggle={toggleHabit}/>
+                                </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </FieldGroup>
+                        </CardHeader>
+                    </Card>
+                </TabsContent>
+                {/* Create tab */}
+                <TabsContent value='create'>
+                    <Card>
+                        <CardHeader>
+                          {/* TextArea field for Title, select tabs for type, TextArea for description */}
+                          <FieldGroup className='min-h-82'>
+                            <HabitCreateCard onAdd={handleAdd}/>
+                          </FieldGroup>
+                        </CardHeader>
+                    </Card>
+                </TabsContent>
+                {/* Edit tab */}
+                <TabsContent value='edit'>
+                    <Card className="min-h-90 max-h-90 overflow-y-auto">
+                      <CardContent>
+                        <Field className="gap-y-4">
+                          {/* Card list of all active habits, with edit and delete button */}
+                            {habits.map(habit => (
+                              <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete} onEdit={handleEdit}/>
+                            ))}                
+                        </Field>
+                      </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
+          </CardContent>
+          <CardFooter>
+
+          </CardFooter>
+        </Card>
       </div>
-      {/* Tabs component */}
-      <Tabs defaultValue='To-do' className='w-100'>
-          <TabsList>
-              <TabsTrigger value='to-do'>To-do</TabsTrigger>
-              <TabsTrigger value='create'>Create</TabsTrigger>
-              <TabsTrigger value='edit'>Edit</TabsTrigger>
-          </TabsList>
-          {/* To-do tab */}
-          <TabsContent value='to-do'>
-              <Card className="overflow-y-auto">
-                  <CardHeader>
-                    <FieldGroup className='min-h-82'>
-                      <Table className="table-fixed w-full">
-                        <TableHeader>
-                          <TableRow>
-                              <TableHead className='w-[70%]'>Habit</TableHead>
-                              <TableHead className='w-[30%]'>Type</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                      <TableBody>
-                        {habits.map(habit => (
-                          <TableRow key={habit.id}>
-                              <HabitTodoCard habits={habit} onToggle={toggleHabit}/>
-                          </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </FieldGroup>
-                  </CardHeader>
-              </Card>
-          </TabsContent>
-          {/* Create tab */}
-          <TabsContent value='create'>
-              <Card>
-                  <CardHeader>
-                    {/* TextArea field for Title, select tabs for type, TextArea for description */}
-                    <FieldGroup className='min-h-82'>
-                      <HabitCreateCard onAdd={handleAdd}/>
-                    </FieldGroup>
-                  </CardHeader>
-              </Card>
-          </TabsContent>
-          {/* Edit tab */}
-          <TabsContent value='edit'>
-              <Card className="min-h-90 max-h-90 overflow-y-auto">
-                <CardContent>
-                  <Field className="gap-y-4">
-                    {/* Card list of all active habits, with edit and delete button */}
-                      {habits.map(habit => (
-                        <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete} onEdit={handleEdit}/>
-                      ))}                
-                  </Field>
-                </CardContent>
-              </Card>
-          </TabsContent>
-      </Tabs>
     </div>
   )
 }

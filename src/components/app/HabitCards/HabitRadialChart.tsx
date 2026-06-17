@@ -36,48 +36,52 @@ export default function HabitRadialChart({completed, total}: RadialChartProps) {
 
                         <ChartContainer
                             config={chartConfig}
-                            className="mx-auto aspect-square max-h-[250px] w-full"
+                            className="mx-auto aspect-square max-h-[160px] w-full"
                         >
                             <RadialBarChart
                                 data={chartData}
                                 startAngle={90}
                                 endAngle={finalAngle}
-                                outerRadius={90}
-                                innerRadius={80}
+                                outerRadius={60}
+                                innerRadius={50}
+                                cx="50%"
+                                cy="50%"
                             >
-                                <PolarGrid
-                                    gridType="circle"
-                                    radialLines={false}
-                                    stroke="none"
-                                    className="first:fill-muted last:fill-background"
-                                    polarRadius={[90, 80]}
-                                />
-                                <RadialBar 
-                                    dataKey="value" 
-                                    background 
-                                    cornerRadius={10}
-                                />
+
+                            <PolarGrid
+                                gridType="circle"
+                                radialLines={false}
+                                stroke="none"
+                                className="first:fill-muted last:fill-background"
+                                polarRadius={[60, 50]}
+                            />
+                            <RadialBar 
+                                dataKey="value" 
+                                background 
+                                cornerRadius={10}
+                            />
+                            
                                 <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
                                     <Label
                                         content={({ viewBox }) => {
                                             if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                                                 return (
                                                     <text
-                                                        x={viewBox.cx}
-                                                        y={viewBox.cy}
+                                                        x="50%"
+                                                        y="50%"
                                                         textAnchor="middle"
                                                         dominantBaseline="central"
                                                     >
                                                         <tspan
-                                                            x={viewBox.cx}
-                                                            y={viewBox.cy}
-                                                            className="fill-foreground text-4xl font-bold"
+                                                            x="50%"
+                                                            dy="-4"
+                                                            className="fill-foreground text-2xl font-bold"
                                                             >
                                                             {percentage}%
                                                         </tspan>
                                                         <tspan
-                                                            x={viewBox.cx}
-                                                            y={(viewBox.cy || 0) + 24}
+                                                            x="50%"
+                                                            dy="20"
                                                             className="fill-muted-foreground text-xs"
                                                             >
                                                             {completed}/{total} Done
@@ -87,12 +91,14 @@ export default function HabitRadialChart({completed, total}: RadialChartProps) {
                                             }
                                         }}
                                     />
+
+
                                 </PolarRadiusAxis>
                             </RadialBarChart>
                         </ChartContainer>
                     </CardContent>
-                    <CardFooter className="flex-col gap-2 text-sm text-center">
-                        <div className="flex items-center">
+                    <CardFooter className="flex-col text-sm text-center">
+                        <div className="flex items-center text-muted-foreground">
                             {total === 0 ? "No habits created yet"
                             : percentage === 100 ? "Daily habits completed"
                             : `${total - completed} habit${total - completed === 1 ? "" : "s"} left to go`}                         
