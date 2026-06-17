@@ -32,11 +32,11 @@ export default function HabitRadialChart({completed, total}: RadialChartProps) {
                     <CardTitle>Daily log</CardTitle>
                     <CardDescription>Daily completed habits</CardDescription>
                 </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex justify-center">
 
                         <ChartContainer
                             config={chartConfig}
-                            className="mx-auto aspect-square max-h-[160px] w-full"
+                            className="h-[160px] w-[160px]"
                         >
                             <RadialBarChart
                                 data={chartData}
