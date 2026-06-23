@@ -12,6 +12,28 @@ interface LoginPageProps {
 export default function LoginPage({ onLogin }: LoginPageProps) {
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
+    const [ error, setError ] = useState('') 
+
+    const handleLogin = async () => {
+        const url = 'https://localhost:3000/auth/login'
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({email, password})
+        }
+        try {
+            const response = await fetch(url, requestOptions) 
+            if (!response.ok) {
+                setError('Invalid email or password')
+                return
+            }
+            const data = await response.json
+            localStorage.setItem('token', data.token)
+            onLogin()
+        } catch(err) {
+            setError(`Something went wrong: ${err}`)
+        }
+    }
 
     return(
         <div className="flex flex-col items-center justify-center min-h-screen">
@@ -42,7 +64,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                             <Field>
                                 <Button 
                                     variant="outline" 
-                                    onClick={() => {}}>
+                                    onClick={handleLogin}>
                                     Log in
                                 </Button>
                             </Field>
