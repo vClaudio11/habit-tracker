@@ -36,6 +36,8 @@ import HabitRadialChart from "../features/habits/HabitRadialChart"
 import HabitBarChart from "../features/habits/HabitBarChart"
 
 
+
+// Reducer declarations
 type HabitAction = { type: "ADD_HABIT", payload: Habit} | 
                     { type: "DELETE_HABIT", payload: string} | 
                     { type: "EDIT_HABIT", payload: Habit} |
@@ -59,15 +61,19 @@ function habitReducer(state: Habit[], action: HabitAction): Habit[] {
     }
   }
 
+
+
 function App() {
   const [habits, dispatch] = useReducer(habitReducer, [], () => {
     const stored = localStorage.getItem("habits")
     return stored ? JSON.parse(stored) : []
   })
-
   const completed = habits.filter(h => h.completed).length
   const total = habits.length
 
+
+
+  // Ensure that array is seeded with 7 "" array elements
   const [weeklyLog, setWeeklyLog] = useState<DailyLog[]>(() => {
     const stored = localStorage.getItem("weeklyLog")
     const seeded = localStorage.getItem("weeklyLogSeeded")
@@ -96,6 +102,9 @@ function App() {
     return merged
   })
 
+
+
+  // save to localStorage on changes
   useEffect(() => {
     localStorage.setItem("weeklyLog", JSON.stringify(weeklyLog))
   }, [weeklyLog])
@@ -104,17 +113,22 @@ function App() {
     localStorage.setItem("habits", JSON.stringify(habits))
   }, [habits])
 
+
+
+  // reset habits from checked --> unchecked if lastActiveDate != current date
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]
-    const lastDate = localStorage.getItem("lastACtiveDate")
+    const lastDate = localStorage.getItem("lastActiveDate")
 
     if (today !== lastDate) {
       dispatch({ type: "RESET_HABITS" })
-      localStorage.setItem("lastACtiveDate", today)
+      localStorage.setItem("lastActiveDate", today)
     }
   }, [])
 
+
   
+  // callback function props
   function handleAdd(habit: Habit) {
     dispatch({ type: "ADD_HABIT", payload: habit})
   }
@@ -138,7 +152,6 @@ function App() {
 
     updateLog(newCompleted, habits.length)
   }
-
 
   function updateLog(completed: number, total: number) {
     const today = new Date().toISOString().split("T")[0]
@@ -229,7 +242,6 @@ function App() {
             </Tabs>
           </CardContent>
           <CardFooter>
-
           </CardFooter>
         </Card>
       </div>
