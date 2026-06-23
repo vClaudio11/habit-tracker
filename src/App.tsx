@@ -1,8 +1,8 @@
 import { useReducer, useState, useEffect } from "react"
 import { Habit, DailyLog } from "./types"
-import { HabitCreateCard } from "./components/app/HabitCards/HabitCardCreate"
-import { HabitTodoCard } from "./components/app/HabitCards/HabitCardTodo"
-import { HabitEditCard } from "./components/app/HabitCards/HabitCardEdit"
+import { HabitCreateCard } from "../features/habits/HabitCardCreate"
+import { HabitTodoCard } from "../features/habits/HabitCardTodo"
+import { HabitEditCard } from "../features/habits/HabitCardEdit"
 
 
 import {
@@ -32,8 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import HabitRadialChart from "./components/app/HabitCards/HabitRadialChart"
-import HabitBarChart from "./components/app/HabitCards/HabitBarChart"
+import HabitRadialChart from "../features/habits/HabitRadialChart"
+import HabitBarChart from "../features/habits/HabitBarChart"
 
 
 type HabitAction = { type: "ADD_HABIT", payload: Habit} | 

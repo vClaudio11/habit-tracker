@@ -19,5 +19,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "features/habits/HabitBarChart.tsx", "features/habits/HabitCardCreate.tsx", "features/habits/HabitCardEdit.tsx", "features/habits/HabitCardTodo.tsx", "features/habits/HabitRadialChart.tsx"]
 }
