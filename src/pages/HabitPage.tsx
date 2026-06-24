@@ -43,7 +43,8 @@ type HabitAction = { type: "ADD_HABIT", payload: Habit} |
                     { type: "DELETE_HABIT", payload: number} | 
                     { type: "EDIT_HABIT", payload: Habit} |
                     { type: "TOGGLE_HABIT", payload: number} |
-                    { type: "RESET_HABITS" }
+                    { type: "RESET_HABITS" } |
+                    { type: "SET_HABITS", payload: Habit[]}
 
 function habitReducer(state: Habit[], action: HabitAction): Habit[] {
   switch (action.type) {
@@ -57,6 +58,8 @@ function habitReducer(state: Habit[], action: HabitAction): Habit[] {
       return state.map(h => h.id === action.payload ? { ...h, completed: !h.completed} : h)
     case "RESET_HABITS":
       return state.map(h => ({ ...h, completed: false}))
+    case "SET_HABITS":
+      return action.payload
       default:
       return state
     }
@@ -119,6 +122,20 @@ export default function HabitPage() {
     fetchWeeklyLog()
   }, [])
 
+
+
+  useEffect(() => {
+    const fetchHabits = async () => {
+      const token = localStorage.getItem('token')
+      const response = await fetch('http://localhost:3000/habits', {
+        headers: { Authorization: `Bearer ${token}`}
+      })
+      const data = await response.json()
+      dispatch({ type: "SET_HABITS", payload: data})
+    }
+
+    fetchHabits()
+  }, [])
 
 
   useEffect(() => {
