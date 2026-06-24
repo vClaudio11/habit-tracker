@@ -67,9 +67,12 @@ function habitReducer(state: Habit[], action: HabitAction): Habit[] {
     }
   }
 
+interface HabitPageProps {
+  onLogout: () => void
+}
 
 
-export default function HabitPage() {
+export default function HabitPage({ onLogout }: HabitPageProps) {
   const [habits, dispatch] = useReducer(habitReducer, [], () => {
       const stored = localStorage.getItem("habits")
       return stored ? JSON.parse(stored) : []
@@ -243,7 +246,7 @@ export default function HabitPage() {
 
 
   function handleLogout() {
-
+    onLogout()
   }
 
 
@@ -271,7 +274,7 @@ export default function HabitPage() {
                   <CardDescription>Log your habits</CardDescription>
                 </div>
                 <div>
-                  <Logout />
+                  <Logout onLogout={handleLogout}/>
                 </div>
               </CardHeader>
               <CardContent>
