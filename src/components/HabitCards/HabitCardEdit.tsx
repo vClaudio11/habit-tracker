@@ -33,7 +33,7 @@ import {
 import { Label } from "@/components/ui/label"
 
 interface HabitCardProps {
-    onDelete: (id: string) => void
+    onDelete: (id: number) => void
     onEdit: (habit: Habit) => void
     habits: Habit
 }

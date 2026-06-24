@@ -7,7 +7,7 @@ import {
 
 interface HabitCardProps {
     habits: Habit
-    onToggle: (id: string) => void
+    onToggle: (id: number) => void
 }
 
 export function HabitTodoCard({ habits, onToggle }: HabitCardProps) {

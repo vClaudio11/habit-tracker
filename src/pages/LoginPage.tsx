@@ -15,7 +15,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     const [ error, setError ] = useState('') 
 
     const handleLogin = async () => {
-        const url = 'https://localhost:3000/auth/login'
+        const url = 'http://localhost:3000/auth/login'
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -27,7 +27,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 setError('Invalid email or password')
                 return
             }
-            const data = await response.json
+            const data = await response.json()
             localStorage.setItem('token', data.token)
             onLogin()
         } catch(err) {

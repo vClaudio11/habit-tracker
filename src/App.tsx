@@ -1,16 +1,17 @@
+import { useState } from "react"
 import HabitPage from "./pages/HabitPage"
 import LoginPage from "./pages/LoginPage"
 
 function App() {
-  const token = localStorage.getItem('token')
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'))
 
   function onLogin() {
-
+    setIsLoggedIn(true)
   }
 
   return (
     <div>
-      {token ? (
+      {isLoggedIn ? (
         <HabitPage />
       ) : (
         <LoginPage onLogin={onLogin}/>

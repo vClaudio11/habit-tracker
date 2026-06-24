@@ -1,7 +1,7 @@
 export type NoteType = 'Health' | 'Education' | 'Finance' | null
 
 export interface Habit {
-    id: string
+    id: number
     title: string
     type: NoteType
     description: string

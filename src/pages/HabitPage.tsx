@@ -38,9 +38,9 @@ import HabitBarChart from "../components/HabitCards/HabitBarChart"
 
 // Reducer declarations
 type HabitAction = { type: "ADD_HABIT", payload: Habit} | 
-                    { type: "DELETE_HABIT", payload: string} | 
+                    { type: "DELETE_HABIT", payload: number} | 
                     { type: "EDIT_HABIT", payload: Habit} |
-                    { type: "TOGGLE_HABIT", payload: string} |
+                    { type: "TOGGLE_HABIT", payload: number} |
                     { type: "RESET_HABITS" }
 
 function habitReducer(state: Habit[], action: HabitAction): Habit[] {
@@ -69,37 +69,50 @@ export default function HabitPage() {
     })
   const completed = habits.filter(h => h.completed).length
   const total = habits.length
-  
+  const [weeklyLog, setWeeklyLog] = useState<DailyLog[]>([])
   
   
   // Ensure that array is seeded with 7 "" array elements
-  const [weeklyLog, setWeeklyLog] = useState<DailyLog[]>(() => {
-    const stored = localStorage.getItem("weeklyLog")
-    const seeded = localStorage.getItem("weeklyLogSeeded")
-    
-    if (stored && seeded) return JSON.parse(stored)
-    
-    // Populate weekly log with empty habits or 0 habits
-    const today = new Date()
-    const seed = Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(today)
-      date.setDate(today.getDate() - (6 - i))
-      return {
-        date: date.toISOString().split("T")[0],
-        completed: 0,
-        total: 0
+  useEffect(() => {
+    const fetchWeeklyLog = async () => {
+      const token = localStorage.getItem('token')
+      const response = await fetch('http://localhost:3000/weekly-log', {
+        headers: { Authorization: `Bearer ${token}`}
+      })
+      const data = await response.json()
+
+      if (data.length === 0) {
+        // if weekly-log is empty then seed the results
+        const today = new Date()
+        const seed = Array.from({ length: 7 }, (_, i) => {
+          const date = new Date(today)
+          date.setDate(today.getDate() - (6 - i))
+          return {
+            date: date.toISOString().split("T")[0],
+            completed: 0,
+            total: 0
+          }
+        })
+        // update UI - synchronous 
+        setWeeklyLog(seed)
+
+        // POST seed to DB - async
+        await fetch('http://localhost:3000/weekly-log/seed', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(seed)
+        })
+
+      } else {
+        setWeeklyLog(data)
       }
-    })
+    }
 
-    // Merge existing data on top of the seeded
-    const existing = stored ? JSON.parse(stored) : []
-    const merged = seed.map(day => 
-      existing.find((d: DailyLog) => d.date === day.date) || day
-    )
-
-    localStorage.setItem("weeklyLogSeeded", "true")
-    return merged
-  })
+    fetchWeeklyLog()
+  }, [])
 
 
 
@@ -132,7 +145,7 @@ export default function HabitPage() {
     dispatch({ type: "ADD_HABIT", payload: habit})
   }
 
-  function handleDelete(id: string) {
+  function handleDelete(id: number) {
     dispatch({ type: "DELETE_HABIT", payload: id})
   }
 
@@ -140,7 +153,7 @@ export default function HabitPage() {
     dispatch({ type: "EDIT_HABIT", payload: habit})
   }
 
-  function toggleHabit(id: string) {
+  function toggleHabit(id: number) {
     dispatch({ type: "TOGGLE_HABIT", payload: id})
     
     // calculate number of completed before state loads
@@ -178,12 +191,9 @@ export default function HabitPage() {
           <CardContent>
             {/* Charts */}
             <div className="grid grid-cols-2 gap-4 w-full mb-4">
-              {/* Radial chart */}
                 <HabitRadialChart completed={completed} total={total}/>   
-              {/* Bar chart */}
                 <HabitBarChart weeklyLog={weeklyLog}/>
             </div>
-            {/* Tabs component */}
             <Tabs defaultValue='To-do' className='w-auto'>
                 <TabsList>
                     <TabsTrigger value='to-do'>To-do</TabsTrigger>
@@ -218,7 +228,6 @@ export default function HabitPage() {
                 <TabsContent value='create'>
                     <Card>
                         <CardHeader>
-                          {/* TextArea field for Title, select tabs for type, TextArea for description */}
                           <FieldGroup className='min-h-82'>
                             <HabitCreateCard onAdd={handleAdd}/>
                           </FieldGroup>
@@ -230,7 +239,6 @@ export default function HabitPage() {
                     <Card className="min-h-90 max-h-90 overflow-y-auto">
                       <CardContent>
                         <Field className="gap-y-4">
-                          {/* Card list of all active habits, with edit and delete button */}
                             {habits.map(habit => (
                               <HabitEditCard key={habit.id} habits={habit} onDelete={handleDelete} onEdit={handleEdit}/>
                             ))}                
