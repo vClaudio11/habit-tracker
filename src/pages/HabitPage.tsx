@@ -181,8 +181,22 @@ export default function HabitPage() {
     dispatch({ type: "DELETE_HABIT", payload: id})
   }
 
-  function handleEdit(habit: Habit) {
-    dispatch({ type: "EDIT_HABIT", payload: habit})
+  async function handleEdit(habit: Habit) {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`http://localhost:3000/habits/${habit.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        title: habit.title,
+        type: habit.type,
+        description: habit.description,
+      })
+    })
+    const data = await response.json()
+    dispatch({ type: "EDIT_HABIT", payload: data})
   }
 
   function toggleHabit(id: number) {
