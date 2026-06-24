@@ -1,4 +1,4 @@
-import { useReducer, useState, useEffect } from "react"
+import { useReducer, useState, useEffect, useRef } from "react"
 import { Habit, DailyLog } from "../types"
 import { HabitCreateCard } from "../components/HabitCards/HabitCardCreate"
 import { HabitTodoCard } from "../components/HabitCards/HabitCardTodo"
@@ -35,6 +35,8 @@ import HabitRadialChart from "../components/HabitCards/HabitRadialChart"
 import HabitBarChart from "../components/HabitCards/HabitBarChart"
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item"
 import { Spinner } from "@/components/ui/spinner"
+import { LogOut } from 'lucide-react';
+import { Label } from "@/components/ui/label"
 
 
 
@@ -76,11 +78,14 @@ export default function HabitPage() {
   const total = habits.length
   const [weeklyLog, setWeeklyLog] = useState<DailyLog[]>([])
   const [loading, setLoading] = useState(true)
-  
+  const hasFetched = useRef(false)
   
 
   // Ensure that array is seeded with 7 "" array elements
   useEffect(() => {
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchWeeklyLog = async () => {
       const token = localStorage.getItem('token')
       const response = await fetch('http://localhost:3000/weekly-log', {
@@ -116,6 +121,7 @@ export default function HabitPage() {
         setLoading(false)
       } else {
         setWeeklyLog(data)
+        setLoading(false)
       }
     }
 
@@ -171,6 +177,8 @@ export default function HabitPage() {
     dispatch({ type: "ADD_HABIT", payload: data})
   }
 
+
+
   async function handleDelete(id: number) {
     const token = localStorage.getItem('token')
     await fetch(`http://localhost:3000/habits/${id}`, {
@@ -179,6 +187,8 @@ export default function HabitPage() {
     })
     dispatch({ type: "DELETE_HABIT", payload: id})
   }
+
+
 
   async function handleEdit(habit: Habit) {
     const token = localStorage.getItem('token')
@@ -197,6 +207,8 @@ export default function HabitPage() {
     const data = await response.json()
     dispatch({ type: "EDIT_HABIT", payload: data})
   }
+
+
 
   function toggleHabit(id: number) {
     dispatch({ type: "TOGGLE_HABIT", payload: id})
@@ -228,6 +240,8 @@ export default function HabitPage() {
     setWeeklyLog(prev => prev.map(d => d.date === today ? data : d))
   }
 
+
+
     return(
       <div className="flex flex-col items-center justify-center min-h-screen"> 
       {/* Hardcode the mobile layout UI */}
@@ -245,9 +259,15 @@ export default function HabitPage() {
             </div>
           ) : (
             <Card>
-              <CardHeader>
-                <CardTitle>Habit tracker</CardTitle>
-                <CardDescription>Log your habits</CardDescription>
+              <CardHeader className="flex justify-between">
+                <div>
+                  <CardTitle>Habit tracker</CardTitle>
+                  <CardDescription>Log your habits</CardDescription>
+                </div>
+                <div className="flex flex-col justify-center items-center">
+                  <LogOut className="text-gray-700 hover:cursor-pointer"/>
+                  <Label>Logout</Label>
+                </div>
               </CardHeader>
               <CardContent>
                 {/* Charts */}
