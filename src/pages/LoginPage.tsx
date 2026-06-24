@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,7 +14,6 @@ interface LoginPageProps {
 export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: LoginPageProps) {
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
-    const [ error, setError ] = useState('') 
 
     const handleLogin = async () => {
         const url = 'http://localhost:3000/auth/login'
@@ -26,14 +25,13 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: Login
         try {
             const response = await fetch(url, requestOptions) 
             if (!response.ok) {
-                setError('Invalid email or password')
-                return
+                throw new Error('Invalid')
             }
             const data = await response.json()
             localStorage.setItem('token', data.token)
             onLogin()
-        } catch(err) {
-            setError(`Something went wrong: ${err}`)
+        } catch(error) {
+            return `Something went wrong: ${error}`
         }
     }
 
