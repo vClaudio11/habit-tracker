@@ -27,7 +27,7 @@ interface HabitCardProps {
 }
 
 const INITIAL_FORM_STATE: Habit = {
-  id: "",
+  id: 0,
   title: "",
   description: "",
   type: null, 
@@ -43,7 +43,7 @@ export function HabitCreateCard({ onAdd }: HabitCardProps) {
 
     function handleAdd(e: React.SubmitEvent<HTMLFormElement>) {
         e.preventDefault()
-        onAdd({...card, id:crypto.randomUUID()})
+        onAdd({...card})
         handleReset()
     }
 

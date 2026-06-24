@@ -138,6 +138,7 @@ export default function HabitPage() {
   }, [])
 
 
+
   useEffect(() => {
     localStorage.setItem("habits", JSON.stringify(habits))
   }, [habits])
@@ -158,8 +159,22 @@ export default function HabitPage() {
 
   
   // callback function props
-  function handleAdd(habit: Habit) {
-    dispatch({ type: "ADD_HABIT", payload: habit})
+  async function handleAdd(habit: Habit) {
+    const token = localStorage.getItem('token')
+    const response = await fetch('http://localhost:3000/habits', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        title: habit.title,
+        type: habit.type,
+        description: habit.description
+      })
+    })
+    const data = await response.json()
+    dispatch({ type: "ADD_HABIT", payload: data})
   }
 
   function handleDelete(id: number) {
