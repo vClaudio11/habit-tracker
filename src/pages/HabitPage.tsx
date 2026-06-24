@@ -3,6 +3,7 @@ import { Habit, DailyLog } from "../types"
 import { HabitCreateCard } from "../components/HabitCards/HabitCardCreate"
 import { HabitTodoCard } from "../components/HabitCards/HabitCardTodo"
 import { HabitEditCard } from "../components/HabitCards/HabitCardEdit"
+import { Logout } from "@/components/Icons/Logout"
 
 import {
   Card,
@@ -35,8 +36,7 @@ import HabitRadialChart from "../components/HabitCards/HabitRadialChart"
 import HabitBarChart from "../components/HabitCards/HabitBarChart"
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item"
 import { Spinner } from "@/components/ui/spinner"
-import { LogOut } from 'lucide-react';
-import { Label } from "@/components/ui/label"
+
 
 
 
@@ -242,6 +242,12 @@ export default function HabitPage() {
 
 
 
+  function handleLogout() {
+
+  }
+
+
+
     return(
       <div className="flex flex-col items-center justify-center min-h-screen"> 
       {/* Hardcode the mobile layout UI */}
@@ -264,9 +270,8 @@ export default function HabitPage() {
                   <CardTitle>Habit tracker</CardTitle>
                   <CardDescription>Log your habits</CardDescription>
                 </div>
-                <div className="flex flex-col justify-center items-center">
-                  <LogOut className="text-gray-700 hover:cursor-pointer"/>
-                  <Label>Logout</Label>
+                <div>
+                  <Logout />
                 </div>
               </CardHeader>
               <CardContent>
