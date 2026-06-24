@@ -139,12 +139,6 @@ export default function HabitPage() {
 
 
 
-  useEffect(() => {
-    localStorage.setItem("habits", JSON.stringify(habits))
-  }, [habits])
-
-
-
   // reset habits from checked --> unchecked if lastActiveDate != current date
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]
@@ -216,18 +210,22 @@ export default function HabitPage() {
     updateLog(newCompleted, habits.length)
   }
 
-  function updateLog(completed: number, total: number) {
+  async function updateLog(completed: number, total: number) {
     const today = new Date().toISOString().split("T")[0]
+    const token = localStorage.getItem('token')
 
-    setWeeklyLog(prev => {
-      const existing = prev.findIndex(d => d.date === today)
-      if (existing !== -1) {
-        const updated = [...prev]
-        updated[existing] = { date: today, completed: completed, total: total}
-        return updated
-      }
-      return [... prev, { date: today, completed: completed, total: total}].slice(-7)
+    const response = await fetch(`http://localhost:3000/weekly-log/${today}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ completed, total})
     })
+
+    const data = await response.json()
+
+    setWeeklyLog(prev => prev.map(d => d.date === today ? data : d))
   }
 
     return(

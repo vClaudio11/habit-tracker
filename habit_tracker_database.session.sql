@@ -1,1 +1,1 @@
-SELECT * FROM habits;
+SELECT * FROM weekly_log;
