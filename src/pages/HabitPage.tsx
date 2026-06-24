@@ -177,7 +177,12 @@ export default function HabitPage() {
     dispatch({ type: "ADD_HABIT", payload: data})
   }
 
-  function handleDelete(id: number) {
+  async function handleDelete(id: number) {
+    const token = localStorage.getItem('token')
+    await fetch(`http://localhost:3000/habits/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    })
     dispatch({ type: "DELETE_HABIT", payload: id})
   }
 
