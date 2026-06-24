@@ -14,12 +14,20 @@ function App() {
     setIsLoggedIn(false)
   }
 
+  function onPasswordChange() {
+
+  }
+
+  function onSignIn() {
+
+  }
+
   return (
     <div>
       {isLoggedIn ? (
         <HabitPage onLogout={onLogout}/>
       ) : (
-        <LoginPage onLogin={onLogin}/>
+        <LoginPage onLogin={onLogin} onPasswordChange={onPasswordChange} onSignIn={onSignIn}/>
       )}
     </div>
   )
