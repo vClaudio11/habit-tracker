@@ -1,6 +1,6 @@
 import type { Habit, NoteType } from "@/types"
 import { useState } from "react"
-import { TrashIcon } from "@/components/icons/heroicons-trash"
+import { Trash } from 'lucide-react';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -28,6 +28,7 @@ import {
 
 import {
   InputGroup,
+  InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group"
 import { Label } from "@/components/ui/label"
@@ -73,10 +74,6 @@ export function HabitEditCard({ onDelete, onEdit, habits }: HabitCardProps) {
                     <CardHeader>
                         <div className="flex flex-row justify-between items-center">
                             <CardTitle>{habits.title}</CardTitle>
-                            <TrashIcon 
-                                onClick={deleteHabit}
-                                className="text-red-500 hover:cursor-pointer">
-                            </TrashIcon>
                         </div>
                         <CardDescription>
                             {habits.type}
@@ -85,13 +82,20 @@ export function HabitEditCard({ onDelete, onEdit, habits }: HabitCardProps) {
                     <CardContent>
                         <p>{habits.description}</p>
                     </CardContent>
-                    <CardFooter className="flex flex-row min-w-max">
+                    <CardFooter className="grid grid-cols-5 gap-2">                     
                         <Button 
                             variant="outline" size="sm" 
                             onClick={changeEdit}
-                            className="w-full">
+                            className="col-span-3">
                             Edit
                         </Button>
+                        <Button variant="default" size="sm" className="flex items-center justify-center bg-red-500 col-span-2">
+                            <Trash 
+                                onClick={deleteHabit}
+                                className= "hover:cursor-pointer">
+                            </Trash>
+                            Delete
+                        </Button>                     
                     </CardFooter>
                 </Card>
             : 
