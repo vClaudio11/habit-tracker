@@ -27,7 +27,7 @@ export default function HabitRadialChart({completed, total}: RadialChartProps) {
     
     return (
         <div className="w-full">
-            <Card>
+            <Card className="flex flex-col gap-6">
                 <CardHeader>
                     <CardTitle>Daily log</CardTitle>
                     <CardDescription>Daily completed habits</CardDescription>

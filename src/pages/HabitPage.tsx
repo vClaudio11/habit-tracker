@@ -251,10 +251,8 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
 
 
 
-    return(
-      <div className="flex flex-col items-center justify-center min-h-screen"> 
-      {/* Hardcode the mobile layout UI */}
-        <div className="w-[390px] h-[844px] overflow-y-hidden overflow-x-hidden rounded-3xl shadow-2xl border border-gray-800 bg-background">
+    return( 
+        <div className="min-h-screen rounded-none border-none shadow-none">
           {loading ? (
             <div className="flex justify-center items-center h-full w-full [--radius:1rem]">
               <Item variant='muted' className="flex flex-col justify-center items-center text-center">
@@ -267,7 +265,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
               </Item>
             </div>
           ) : (
-            <Card>
+            <Card className="flex flex-col justify-center min-h-screen rounded-none border-none shadow-none">
               <CardHeader className="flex justify-between">
                 <div>
                   <CardTitle>Habit tracker</CardTitle>
@@ -279,7 +277,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
               </CardHeader>
               <CardContent>
                 {/* Charts */}
-                <div className="grid grid-cols-2 gap-4 w-full mb-4">
+                <div className="grid grid-cols-2 gap-4 w-full mb-8 mt-4">
                     <HabitRadialChart completed={completed} total={total}/>   
                     <HabitBarChart weeklyLog={weeklyLog}/>
                 </div>
@@ -337,11 +335,8 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
                     </TabsContent>
                 </Tabs>
               </CardContent>
-              <CardFooter>
-              </CardFooter>
             </Card>
         )}
         </div>
-      </div>
     )
 }

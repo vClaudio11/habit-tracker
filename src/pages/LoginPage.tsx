@@ -44,60 +44,58 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: Login
     }
 
     return(
-        <div className="flex flex-col items-center justify-center min-h-screen">
-            <div className="flex flex-col justify-center w-[390px] h-[844px] overflow-y-hidden overflow-x-hidden rounded-3xl shadow-2xl border border-gray-800 bg-background">
-                <Card className="py-8 mx-4">
-                    <CardHeader className="text-center">
-                        <CardTitle className="text-2xl font-bold -mb-2">Log in</CardTitle>
-                        <CardDescription>Login to your Habits account</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <FieldGroup>
-                            <Field>
-                                <Label>Email</Label>
-                                <Input 
-                                    placeholder="name@example.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </Field>
-                            <Field>
-                                <div className="flex flex-row justify-between">
-                                    <Label>Password</Label>
-                                    <Label 
-                                        className="hover:underline cursor-pointer"
-                                        onClick={handlePassword}
-                                        >
-                                        Forgot your password?
-                                    </Label>
-                                </div>
-                                <Input 
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                />
-                            </Field>
-                            <Field>
-                                <Button 
-                                    variant="default" 
-                                    onClick={handleLogin}>
-                                    Log in
-                                </Button>
-                            </Field>
-                            <Field>
-                                <Label className="flex flex-row justify-center text-center">
-                                    Don't have an account yet? <span 
-                                                                className="underline hover:cursor-pointer"
-                                                                onClick={handleSignIn}
-                                                                >
-                                                                Sign up
-                                                                </span>
+        <div className="min-h-screen flex flex-col justify-center rounded-none border-none shadow-none">
+            <Card className="py-8 mx-4">
+                <CardHeader className="text-center">
+                    <CardTitle className="text-2xl font-bold -mb-2">Log in</CardTitle>
+                    <CardDescription>Login to your Habits account</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <FieldGroup>
+                        <Field>
+                            <Label>Email</Label>
+                            <Input 
+                                placeholder="name@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </Field>
+                        <Field>
+                            <div className="flex flex-row justify-between">
+                                <Label>Password</Label>
+                                <Label 
+                                    className="hover:underline cursor-pointer"
+                                    onClick={handlePassword}
+                                    >
+                                    Forgot your password?
                                 </Label>
-                            </Field>
-                        </FieldGroup>
-                    </CardContent>
-                </Card>
-            </div>
+                            </div>
+                            <Input 
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </Field>
+                        <Field>
+                            <Button 
+                                variant="default" 
+                                onClick={handleLogin}>
+                                Log in
+                            </Button>
+                        </Field>
+                        <Field>
+                            <Label className="flex flex-row justify-center text-center">
+                                Don't have an account yet? <span 
+                                                            className="underline hover:cursor-pointer"
+                                                            onClick={handleSignIn}
+                                                            >
+                                                            Sign up
+                                                            </span>
+                            </Label>
+                        </Field>
+                    </FieldGroup>
+                </CardContent>
+            </Card>
         </div>
     )
 }

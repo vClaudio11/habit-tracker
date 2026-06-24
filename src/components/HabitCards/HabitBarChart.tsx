@@ -22,10 +22,10 @@ export default function HabitBarChart({ weeklyLog }: BarChartProps) {
 
     return (
         <div className="w-full">
-            <Card>
+            <Card className="flex flex-col gap-6">
                 <CardHeader>
                     <CardTitle>Weekly log</CardTitle>
-                    <CardDescription>Completed habits for the last week</CardDescription>
+                    <CardDescription>Completed weekly habits</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ChartContainer config={chartConfig} className="h-[160px] w-full">
