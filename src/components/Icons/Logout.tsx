@@ -19,7 +19,7 @@ export function Logout({ onLogout }: LogoutProps) {
                 <AlertDialogTrigger>
                     <div className="flex flex-col justify-center items-center">
                         <LogOut 
-                        className="text-gray-700 hover:cursor-pointer"
+                        className="text-primary hover:cursor-pointer"
                         />
                         <Label>Logout</Label>
                     </div>

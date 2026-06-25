@@ -16,13 +16,13 @@ interface RadialChartProps {
 const chartConfig = {
     habits: {
         label: "habits",
-        color: "#6366f1"
+        color: "var(--chart-1)"
     }
 }   satisfies ChartConfig
 
 export default function HabitRadialChart({completed, total}: RadialChartProps) {
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0
-    const chartData = [{ value: percentage, fill: "#6366f1"}]
+    const chartData = [{ value: percentage, fill: "var(--chart-1)"}]
     const finalAngle = 90 - (360 * (percentage / 100))
     
     return (

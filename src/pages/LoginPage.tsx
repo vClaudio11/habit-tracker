@@ -4,14 +4,16 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
+import { Mail } from 'lucide-react';
 
 interface LoginPageProps {
     onLogin: () => void
     onPasswordChange: () => void
-    onSignIn: () => void
+    onSignInSwitch: () => void
 }
 
-export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: LoginPageProps) {
+export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }: LoginPageProps) {
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
 
@@ -39,8 +41,8 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: Login
         onPasswordChange()
     }
 
-    function handleSignIn() {
-        onSignIn()
+    function switchToSignIn() {
+        onSignInSwitch()
     }
 
     return(
@@ -48,17 +50,22 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: Login
             <Card className="py-8 mx-4">
                 <CardHeader className="text-center">
                     <CardTitle className="text-2xl font-bold -mb-2">Log in</CardTitle>
-                    <CardDescription>Login to your Habits account</CardDescription>
+                    <CardDescription>Login to your Cloud account</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <FieldGroup>
                         <Field>
                             <Label>Email</Label>
-                            <Input 
-                                placeholder="name@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                            <InputGroup>
+                                <InputGroupInput 
+                                    placeholder="name@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <InputGroupAddon>
+                                    <Mail />
+                                </InputGroupAddon>
+                            </InputGroup>
                         </Field>
                         <Field>
                             <div className="flex flex-row justify-between">
@@ -70,10 +77,11 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: Login
                                     Forgot your password?
                                 </Label>
                             </div>
-                            <Input 
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            <Input
+                                type="password" 
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </Field>
                         <Field>
@@ -87,7 +95,7 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: Login
                             <Label className="flex flex-row justify-center text-center">
                                 Don't have an account yet? <span 
                                                             className="underline hover:cursor-pointer"
-                                                            onClick={handleSignIn}
+                                                            onClick={switchToSignIn}
                                                             >
                                                             Sign up
                                                             </span>

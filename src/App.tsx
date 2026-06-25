@@ -1,9 +1,13 @@
 import { useState } from "react"
 import HabitPage from "./pages/HabitPage"
 import LoginPage from "./pages/LoginPage"
+import LandingPage from "./pages/LandingPage"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'))
+  const [home, setHome] = useState(true)
+  const [login, setLogin] = useState(false)
+  const [signIn, setSignIn] = useState(false)
 
   function onLogin() {
     setIsLoggedIn(true)
@@ -14,21 +18,14 @@ function App() {
     setIsLoggedIn(false)
   }
 
-  function onPasswordChange() {
-
-  }
-
-  function onSignIn() {
-
-  }
-
   return (
     <div>
       {isLoggedIn ? (
         <HabitPage onLogout={onLogout}/>
       ) : (
-        <LoginPage onLogin={onLogin} onPasswordChange={onPasswordChange} onSignIn={onSignIn}/>
+        <LandingPage onLogin={onLogin}/>
       )}
+      {/* <LoginPage onLogin={onLogin} onPasswordChange={onPasswordChange} onSignIn={onSignIn}/> */}
     </div>
   )
 }

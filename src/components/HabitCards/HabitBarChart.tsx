@@ -42,7 +42,7 @@ export default function HabitBarChart({ weeklyLog }: BarChartProps) {
                             cursor={false}
                             content={<ChartTooltipContent hideLabel />}
                             />
-                            <Bar dataKey="completed" fill="#6366f1" radius={8}/>
+                            <Bar dataKey="completed" fill="var(--chart-1)" radius={8}/>
                         </BarChart>
                     </ChartContainer>
                 </CardContent>
