@@ -16,7 +16,7 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignIn }: Login
     const [ password, setPassword ] = useState('')
 
     const handleLogin = async () => {
-        const url = 'http://localhost:3000/auth/login'
+        const url = 'https://express-server-production-23b2.up.railway.app/auth/login'
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

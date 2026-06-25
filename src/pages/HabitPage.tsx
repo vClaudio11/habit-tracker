@@ -90,7 +90,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
 
     const fetchWeeklyLog = async () => {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3000/weekly-log', {
+      const response = await fetch('https://express-server-production-23b2.up.railway.app/weekly-log', {
         headers: { Authorization: `Bearer ${token}`}
       })
       const data = await response.json()
@@ -111,7 +111,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
         setWeeklyLog(seed)
 
         // POST seed to DB - async
-        await fetch('http://localhost:3000/weekly-log/seed', {
+        await fetch('https://express-server-production-23b2.up.railway.app/weekly-log/seed', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
   useEffect(() => {
     const fetchHabits = async () => {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3000/habits', {
+      const response = await fetch('https://express-server-production-23b2.up.railway.app/habits', {
         headers: { Authorization: `Bearer ${token}`}
       })
       const data = await response.json()
@@ -163,7 +163,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
   // callback function props
   async function handleAdd(habit: Habit) {
     const token = localStorage.getItem('token')
-    const response = await fetch('http://localhost:3000/habits', {
+    const response = await fetch('https://express-server-production-23b2.up.railway.app/habits', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
 
   async function handleDelete(id: number) {
     const token = localStorage.getItem('token')
-    await fetch(`http://localhost:3000/habits/${id}`, {
+    await fetch(`https://express-server-production-23b2.up.railway.app/habits/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -194,7 +194,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
 
   async function handleEdit(habit: Habit) {
     const token = localStorage.getItem('token')
-    const response = await fetch(`http://localhost:3000/habits/${habit.id}`, {
+    const response = await fetch(`https://express-server-production-23b2.up.railway.app/habits/${habit.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
     const today = new Date().toISOString().split("T")[0]
     const token = localStorage.getItem('token')
 
-    const response = await fetch(`http://localhost:3000/weekly-log/${today}`, {
+    const response = await fetch(`https://express-server-production-23b2.up.railway.app/weekly-log/${today}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
