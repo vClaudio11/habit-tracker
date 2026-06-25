@@ -25,6 +25,7 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
 
     
 
+    // form setup
     const formSchema = z.object({
         username: z
         .string()
@@ -56,22 +57,19 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
         mode: "onBlur",
         defaultValues: { username: "", email: "", password: "", confirmedPassword: ""},
     })
-    
-    async function handleSignup() {
-        if (!newName || !newEmail || !newPassword || !confirmPassword) {
-            setError('All fields must be filled out')
-            return 
-        }
 
-        onSwitchToLogin()
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        toast("Accounted creation successful", {
+            position: "top-center",
+            classNames: {
+                content: "flex flex-col"
+            }
+        })
     }
 
 
 
-    function onSubmit() {
-        toast("Accounted creation successful")
-    }
-
+    // Move to login page
     function switchToLogin() {
         onSwitchToLogin()
     }
