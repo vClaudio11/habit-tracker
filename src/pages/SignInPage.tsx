@@ -1,26 +1,81 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldGroup } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
 import { Mail } from 'lucide-react';
 import { useState } from "react";
 import { User } from 'lucide-react';
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { toast } from "sonner"
 
 interface SignInPageProps {
     onSwitchToLogin: () => void
 }
 
 export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
+    const [newName, setNewName] = useState('')
     const [newEmail, setNewEmail] = useState('')
     const [newPassword, setNewPassword] = useState('')
-    const [newName, setNewName] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [error, setError] = useState('')
+
+    
+
+    const formSchema = z.object({
+        username: z
+        .string()
+        .min(3, "Username must be at least 3 characters")
+        .max(12, "Username cannot be more than 12 characters")
+        .regex(
+            /^[a-zA-Z0-9_]+$/,
+            "Username can only contain letters, numbers, and underscores"
+        ),
+        email: z
+        .string()
+        .min(1, "Email is required")
+        .pipe(z.email("Invalid email address")),
+        password: z
+        .string()
+        .min(8, "Password must be at least 8 characters"),
+        confirmedPassword: z
+        .string()
+        .min(1, "Please confirm your password")
+    })
+
+    .refine((data) => data.password === data.confirmedPassword, {
+        message: "Passwords do not match",
+        path: ["confirmedPassword"]
+    })
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        mode: "onBlur",
+        defaultValues: { username: "", email: "", password: "", confirmedPassword: ""},
+    })
+    
+    async function handleSignup() {
+        if (!newName || !newEmail || !newPassword || !confirmPassword) {
+            setError('All fields must be filled out')
+            return 
+        }
+
+        onSwitchToLogin()
+    }
+
+
+
+    function onSubmit() {
+        toast("Accounted creation successful")
+    }
 
     function switchToLogin() {
         onSwitchToLogin()
     }
+
     
     return(
         <div>
@@ -31,60 +86,99 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
                     <CardDescription>Create a new Cloud account</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <form id="signupForm" onSubmit={form.handleSubmit(onSubmit)}></form>
                     <FieldGroup>
-                        <Field>
-                            <Label>Username</Label>
-                            <InputGroup>          
-                                <InputGroupInput 
-                                    placeholder="username123"
-                                    value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
-                                />
-                                <InputGroupAddon>
-                                    <User />
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </Field>
-                        <Field>
-                            <Label>Email</Label>
-                            <InputGroup>
-                                <InputGroupInput 
-                                    placeholder="name@example.com"
-                                    value={newEmail}
-                                    onChange={(e) => setNewEmail(e.target.value)}
-                                />
-                                <InputGroupAddon>
-                                    <Mail />
-                                </InputGroupAddon>
-                            </InputGroup>
-                            
-                        </Field>
-                        <Field>
-                            <div className="flex flex-row justify-between">
-                                <Label>Password</Label>
-                            </div>
-                            <Input 
-                            placeholder="••••••••"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            />
-                        </Field>
-                        <Field>
-                            <div className="flex flex-row justify-between">
-                                <Label>Confirm password</Label>
-                            </div>
-                            <Input 
-                            placeholder="••••••••"
-                            value={confirmPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            />
-                        </Field>
+                        <Controller 
+                            name='username'
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Username <span className="text-destructive">*</span> </FieldLabel>
+                                    <InputGroup>          
+                                        <InputGroupInput 
+                                            {...field}
+                                            aria-invalid={fieldState.invalid}
+                                            placeholder="username123"
+                                            autoComplete="off"
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]}/>
+                                        )}
+                                        <InputGroupAddon>
+                                            <User />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </Field>
+                            )}
+                        />
+                        <Controller 
+                            name="email"
+                            control={form.control}
+                            render={({ field, fieldState }) => (        
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Email <span className="text-destructive">*</span> </FieldLabel>
+                                    <InputGroup>
+                                        <InputGroupInput 
+                                            {...field}
+                                            aria-invalid={fieldState.invalid}
+                                            placeholder="name@example.com"
+                                            autoComplete="off"
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]}/>
+                                        )}
+                                        <InputGroupAddon>
+                                            <Mail />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </Field>
+                            )}
+                        />
+                        <Controller 
+                            name="password"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>                      
+                                    <FieldLabel>Password <span className="text-destructive">*</span> </FieldLabel>                   
+                                    <Input 
+                                        {...field}
+                                        aria-invalid={fieldState.invalid}                                
+                                        placeholder="••••••••"
+                                        autoComplete="off"
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]}/>
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <Controller 
+                            name="confirmedPassword"
+                            control={form.control}
+                            render={({ field, fieldState}) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <Label>Confirm password <span className="text-destructive">*</span> </Label>
+                                    <Input 
+                                        {...field}
+                                        aria-invalid={fieldState.invalid}                                
+                                        placeholder="••••••••"
+                                        autoComplete="off"
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]}/>
+                                    )}
+                                </Field>
+                            )}
+                        />
                         <Field>
                             <Button 
                                 variant="default" 
-                                onClick={switchToLogin}>
+                                type="submit"
+                                form="signupForm"
+                            >
                                 Create new account
                             </Button>
+                            <span className="text-center">{error}</span>
                         </Field>
                         <Field>
                             <Label className="flex flex-row justify-center text-center">
