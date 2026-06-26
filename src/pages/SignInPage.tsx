@@ -17,12 +17,8 @@ interface SignInPageProps {
 }
 
 export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
-    const [newName, setNewName] = useState('')
-    const [newEmail, setNewEmail] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState('')
-
+    const [exists, setExists] = useState(false)
     
 
     // form setup
@@ -54,19 +50,50 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        mode: "onBlur",
+        mode: "onSubmit",
         defaultValues: { username: "", email: "", password: "", confirmedPassword: ""},
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        toast("Accounted creation successful", {
-            position: "top-center",
-            classNames: {
-                content: "flex flex-col"
-            }
-        })
-    }
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values)
+            })
+            if (!response.ok) {
+                // if bad request 
+                if (response.status === 400) {
+                    form.setError("email", {
+                        type: "manual",
+                        message: "This email is already registered"
+                    })
+                    throw new Error('Email already exists')
+                }
 
+                throw new Error('Something went wrong while trying to signup')
+            }
+
+            // only if initial form validation and backend validation then output successful
+            toast("Accounted creation successful", {
+                position: "top-center",
+                classNames: {
+                    content: "flex flex-col"
+                }
+            })
+            // user logs in to their account
+            onSwitchToLogin()
+
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message)
+            } else {
+                setError('An unexpected error occured')
+            }
+        }
+
+    }
+    
 
 
     // Move to login page
@@ -100,7 +127,9 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
                                             autoComplete="off"
                                         />
                                         {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]}/>
+                                            <FieldError 
+                                                className="mr-2" 
+                                                errors={[fieldState.error]}/>
                                         )}
                                         <InputGroupAddon>
                                             <User />
@@ -123,7 +152,9 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
                                             autoComplete="off"
                                         />
                                         {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]}/>
+                                            <FieldError
+                                                className="mr-2" 
+                                                errors={[fieldState.error]}/>
                                         )}
                                         <InputGroupAddon>
                                             <Mail />
@@ -143,9 +174,12 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
                                         aria-invalid={fieldState.invalid}                                
                                         placeholder="••••••••"
                                         autoComplete="off"
+                                        type="password"
                                     />
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]}/>
+                                        <FieldError 
+                                            className="mr-2" 
+                                            errors={[fieldState.error]}/>
                                     )}
                                 </Field>
                             )}
@@ -161,6 +195,7 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
                                         aria-invalid={fieldState.invalid}                                
                                         placeholder="••••••••"
                                         autoComplete="off"
+                                        type="password"
                                     />
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]}/>
