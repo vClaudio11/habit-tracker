@@ -5,6 +5,8 @@ import { Cloudy } from 'lucide-react';
 import { useState } from "react";
 import LoginPage from "./LoginPage";
 import SignInPage from "./SignInPage";
+import { toast, Toaster } from "sonner"
+
 
 interface LandingPageProps {
     onLogin: () => void
@@ -15,6 +17,16 @@ type viewTypes = 'landing' | 'login' | 'signup'
 export default function LandingPage({ onLogin }: LandingPageProps) {
     const [view, setView] = useState<viewTypes>('landing')
 
+    function renderToast() {
+        toast("Accounted creation successful", {
+                    description: "Please login to your account",
+                    position: "top-center",
+                    classNames: {
+                    content: "flex flex-col"
+                }
+            })
+    }
+
     function onPasswordChange() {
 
     }
@@ -22,6 +34,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
     return(
         <div>
             {/* Default landing page */}
+            <Toaster />
             {view === 'landing' && (
                 <div className="min-h-screen flex flex-col justify-center items-center rounded-none border-none shadow-none">
                     <Card className="flex flex-col justify-center items-center min-w-full py-8 mx-4">
@@ -64,6 +77,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             {view === 'signup' && (
                 <SignInPage 
                     onSwitchToLogin={() => setView('login')}
+                    renderToast={() => renderToast()}
                 />
             )}
         </div>

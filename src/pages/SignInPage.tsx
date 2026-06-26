@@ -10,17 +10,15 @@ import { User } from 'lucide-react';
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { toast } from "sonner"
 
 interface SignInPageProps {
     onSwitchToLogin: () => void
+    renderToast: () => void
 }
 
-export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
+export default function SignInPage({ onSwitchToLogin, renderToast }: SignInPageProps) {
     const [error, setError] = useState('')
-    const [exists, setExists] = useState(false)
     
-
     // form setup
     const formSchema = z.object({
         username: z
@@ -74,16 +72,13 @@ export default function SignInPage({ onSwitchToLogin }: SignInPageProps) {
                 throw new Error('Something went wrong while trying to signup')
             }
 
-            // only if initial form validation and backend validation then output successful
-            toast("Accounted creation successful", {
-                position: "top-center",
-                classNames: {
-                    content: "flex flex-col"
-                }
-            })
+            // call toast 
+            renderToast()
+
             // user logs in to their account
             onSwitchToLogin()
 
+            
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message)
