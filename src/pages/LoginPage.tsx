@@ -1,11 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Field, FieldGroup } from "@/components/ui/field"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { Mail } from 'lucide-react';
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
 
 interface LoginPageProps {
     onLogin: () => void
@@ -14,15 +16,13 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }: LoginPageProps) {
-    const [ email, setEmail ] = useState('')
-    const [ password, setPassword ] = useState('')
 
-    const handleLogin = async () => {
+    async function handleLogin(values: z.infer<typeof formSchema>) {
         const url = `${import.meta.env.VITE_API_URL}/auth/login`
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({email, password})
+            body: JSON.stringify(values)
         }
         try {
             const response = await fetch(url, requestOptions) 
@@ -35,7 +35,23 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }:
         } catch(error) {
             return `Something went wrong: ${error}`
         }
+
     }
+
+    const formSchema = z.object({
+        email: z
+        .string()
+        .min(1, "Email is required")
+        .pipe(z.email("Invalid email address")),
+        password: z
+        .string()
+    })
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        mode: "onSubmit",
+        defaultValues: { email: "", password: ""},
+    })
 
     function handlePassword() {
         onPasswordChange()
@@ -53,41 +69,63 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }:
                     <CardDescription>Login to your Cloud account</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <form id="loginForm" onSubmit={form.handleSubmit(handleLogin)}></form>
                     <FieldGroup>
-                        <Field>
-                            <Label>Email</Label>
-                            <InputGroup>
-                                <InputGroupInput 
-                                    placeholder="name@example.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                                <InputGroupAddon>
-                                    <Mail />
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </Field>
-                        <Field>
-                            <div className="flex flex-row justify-between">
-                                <Label>Password</Label>
-                                <Label 
-                                    className="hover:underline cursor-pointer"
-                                    onClick={handlePassword}
-                                    >
-                                    Forgot your password?
-                                </Label>
-                            </div>
-                            <Input
-                                type="password" 
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </Field>
+                        <Controller 
+                            name="email"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Email</FieldLabel>
+                                    <InputGroup>
+                                        <InputGroupInput 
+                                            {...field}
+                                            aria-invalid={fieldState.invalid}
+                                            placeholder="name@example.com"
+                                            autoComplete="off"
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]}/>
+                                        )}
+                                        <InputGroupAddon>
+                                            <Mail />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </Field>
+                            )}
+                        />
+                        <Controller 
+                            name="password"
+                            control={form.control}
+                            render={({ field, fieldState}) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <div className="flex flex-row justify-between">
+                                        <FieldLabel>Password</FieldLabel>
+                                        <FieldLabel 
+                                            className="hover:underline cursor-pointer"
+                                            onClick={handlePassword}
+                                            >
+                                            Forgot your password?
+                                        </FieldLabel>
+                                    </div>
+                                    <Input
+                                        {...field}
+                                        aria-invalid={fieldState.invalid}
+                                        placeholder="••••••••"
+                                        autoComplete="off"
+                                        type="password"
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]}/>
+                                    )}
+                                </Field>
+                            )}
+                        />
                         <Field>
                             <Button 
-                                variant="default" 
-                                onClick={handleLogin}>
+                                variant="default"
+                                type="submit" 
+                                form="loginForm">
                                 Log in
                             </Button>
                         </Field>
