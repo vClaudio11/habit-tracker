@@ -1,7 +1,7 @@
 import { useState } from "react"
 import HabitPage from "./pages/HabitPage"
 import LandingPage from "./pages/LandingPage"
-import { animate, AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import LoginPage from "./pages/LoginPage"
 import SignInPage from "./pages/SignInPage"
 import { toast, Toaster } from "sonner"

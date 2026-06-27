@@ -234,7 +234,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ completed, total})
+      body: JSON.stringify({ completed, total })
     })
 
     const data = await response.json()
