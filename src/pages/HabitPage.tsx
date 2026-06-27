@@ -265,7 +265,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
             </div>
           ) : (
             <Card className="flex flex-col justify-center min-h-screen rounded-none border-none shadow-none">
-              <CardHeader className="flex justify-between">
+              <CardHeader className="flex justify-between mb-4">
                 <div>
                   <CardTitle>Habit tracker</CardTitle>
                   <CardDescription>Log your habits</CardDescription>
