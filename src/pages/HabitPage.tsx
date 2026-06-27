@@ -251,7 +251,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
 
 
     return( 
-        <div className="min-h-screen rounded-none border-none shadow-none">
+        <div className="flex flex-col justify-center items-center min-h-screen rounded-none border-none shadow-none">
           {loading ? (
             <div className="flex justify-center items-center h-full w-full [--radius:1rem]">
               <Item variant='muted' className="flex flex-col justify-center items-center text-center">

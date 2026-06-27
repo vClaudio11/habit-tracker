@@ -1,85 +1,43 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldContent } from "@/components/ui/field";
 import { Cloudy } from 'lucide-react';
-import { useState } from "react";
-import LoginPage from "./LoginPage";
-import SignInPage from "./SignInPage";
-import { toast, Toaster } from "sonner"
-
-
 interface LandingPageProps {
     onLogin: () => void
+    onSignup: () => void
 }
 
-type viewTypes = 'landing' | 'login' | 'signup'
-
-export default function LandingPage({ onLogin }: LandingPageProps) {
-    const [view, setView] = useState<viewTypes>('landing')
-
-    function renderToast() {
-        toast("Accounted creation successful", {
-                    description: "Please login to your account",
-                    position: "top-center",
-                    classNames: {
-                    content: "flex flex-col"
-                }
-            })
-    }
-
-    function onPasswordChange() {
-
-    }
+export default function LandingPage({ onLogin, onSignup }: LandingPageProps) {
 
     return(
         <div>
-            {/* Default landing page */}
-            <Toaster />
-            {view === 'landing' && (
-                <div className="min-h-screen flex flex-col justify-center items-center rounded-none border-none shadow-none">
-                    <Card className="flex flex-col justify-center items-center min-w-full py-8 mx-4">
-                        <CardHeader className="flex flex-col justify-center items-center min-w-screen">
-                            <Cloudy />
-                            <CardTitle>Welcome to Cloud</CardTitle>
-                        </CardHeader>
-                        <FieldContent className="">
-                            <Field>
-                                <Button
-                                    variant="default"
-                                    onClick={() => setView('login')}
-                                >
-                                    Login
-                                </Button>
-                            </Field>
-                            <Field>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setView('signup')}
-                                >
-                                    Sign up
-                                </Button>
-                            </Field>
-                        </FieldContent>
-                    </Card>
+            <div className="min-h-screen flex flex-col justify-center items-center rounded-none border-none shadow-none">
+                <div className="flex flex-col gap-12 py-8 mx-4 min-w-full transition-all duration-300">
+                    <CardHeader className="flex flex-col justify-center items-center text-center min-w-full">
+                        <Cloudy />
+                        <CardTitle>Welcome to Cloud</CardTitle>
+                        <CardDescription>Centralized habits for everyday optimization.</CardDescription>
+                    </CardHeader>
+                    <FieldContent className="flex flex-row gap-2 mx-16">
+                        <Field className="">
+                            <Button
+                                variant="default"
+                                onClick={() => onLogin()}
+                            >
+                                Login
+                            </Button>
+                        </Field>
+                        <Field>
+                            <Button
+                                variant="outline"
+                                onClick={() => onSignup()}
+                            >
+                                Sign up
+                            </Button>
+                        </Field>
+                    </FieldContent>
                 </div>
-            )}
-
-            {/* Login view */}
-            {view === 'login' && (
-                <LoginPage 
-                    onLogin={onLogin} 
-                    onSignInSwitch={() => setView('signup')} 
-                    onPasswordChange={onPasswordChange}
-                />
-            )}
-            
-            {/* Signup view */}
-            {view === 'signup' && (
-                <SignInPage 
-                    onSwitchToLogin={() => setView('login')}
-                    renderToast={() => renderToast()}
-                />
-            )}
-        </div>
+            </div>
+        </div>    
     )
 }
