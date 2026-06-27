@@ -265,7 +265,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
             </div>
           ) : (
             <Card className="flex flex-col justify-center min-h-screen rounded-none border-none shadow-none">
-              <CardHeader className="flex justify-between mb-4">
+              <CardHeader className="flex justify-between">
                 <div>
                   <CardTitle>Habit tracker</CardTitle>
                   <CardDescription>Log your habits</CardDescription>
@@ -274,7 +274,7 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
                   <Logout onLogout={handleLogout}/>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="mb-6">
                 {/* Charts */}
                 <div className="grid grid-cols-2 gap-4 w-full mb-8 mt-4">
                     <HabitRadialChart completed={completed} total={total}/>   
