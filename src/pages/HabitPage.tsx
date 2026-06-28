@@ -95,36 +95,10 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
       })
       const data = await response.json()
 
-      if (data.length === 0) {
-        // if weekly-log is empty then seed the results
-        const today = new Date()
-        const seed = Array.from({ length: 7 }, (_, i) => {
-          const date = new Date(today)
-          date.setDate(today.getDate() - (6 - i))
-          return {
-            date: date.toISOString().split("T")[0],
-            completed: 0,
-            total: 0
-          }
-        })
         // update UI - synchronous 
-        setWeeklyLog(seed)
-
-        // POST seed to DB - async
-        await fetch(`${import.meta.env.VITE_API_URL}/weekly-log/seed`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(seed)
-        })
-
-        setLoading(false)
-      } else {
         setWeeklyLog(data)
         setLoading(false)
-      }
+        
     }
 
     fetchWeeklyLog()
@@ -216,16 +190,14 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
     dispatch({ type: "TOGGLE_HABIT", payload: id})
     
     // calculate number of completed before state loads
-    const isCurrentlyCompleted = habits.find(h => h.id === id)?.completed
-    const newCompleted = isCurrentlyCompleted
-      ? habits.filter(h => h.completed).length -1
-      : habits.filter(h => h.completed).length + 1
+    const nextHabits = habits.map(h => h.id === id ? { ...h, completed: !h.completed } : h)
+    const newCompleted = nextHabits.filter(h => h.completed).length
 
-    updateLog(newCompleted, habits.length)
+    updateLog(newCompleted, nextHabits.length)
   }
 
   async function updateLog(completed: number, total: number) {
-    const today = new Date().toISOString().split("T")[0]
+    const today = new Date().toLocaleDateString('sv-SE');
     const token = localStorage.getItem('token')
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/weekly-log/${today}`, {
