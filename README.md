@@ -9,9 +9,9 @@ data isolation through JWT authentication
 ## Preview
 
 <div align="center">
-  <img src="screenshot3.png" width="33%" />
   <img src="screenshot4.png" width="33%" />
   <img src="screenshot1.png" width="33%" />
+  <img src="screenshot3.png" width="33%" />
 </div>
 
 ## Tech Stack
