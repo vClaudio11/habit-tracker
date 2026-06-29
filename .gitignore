@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 .env
 .env.production
+habit_tracker_database.session.sql
+Railway.session.sql
+dist/
+*.session.sql
+dist/
