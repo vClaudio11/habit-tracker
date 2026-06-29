@@ -9,10 +9,10 @@ data isolation through JWT authentication
 ## Preview
 
 <div align="center">
-  <img src="D:\Coding\Projects\SWE Roadmap\Phase 3\habit-tracker\screenshot1.png" width="25%" />
-  <img src="D:\Coding\Projects\SWE Roadmap\Phase 3\habit-tracker\screenshot2.png" width="25%" />
-  <img src="D:\Coding\Projects\SWE Roadmap\Phase 3\habit-tracker\screenshot3.png" width="25%" />
-  <img src="D:\Coding\Projects\SWE Roadmap\Phase 3\habit-tracker\screenshot1.png" width="25%" />
+  <img src="screenshot1.png" width="25%" />
+  <img src="screenshot2.png" width="25%" />
+  <img src="screenshot3.png" width="25%" />
+  <img src="screenshot1.png" width="25%" />
 </div>
 
 ## Tech Stack
