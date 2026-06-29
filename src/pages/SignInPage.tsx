@@ -83,7 +83,7 @@ export default function SignInPage({ onSwitchToLogin, renderToast }: SignInPageP
             if (err instanceof Error) {
                 setError(err.message)
             } else {
-                setError('An unexpected error occured')
+                setError('An unexpected error occurred')
             }
         }
 

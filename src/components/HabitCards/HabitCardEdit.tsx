@@ -92,7 +92,7 @@ export function HabitEditCard({ onDelete, onEdit, habits }: HabitCardProps) {
                             onClick={deleteHabit}
                             variant="default" 
                             size="sm" 
-                            className="flex items-center justify-center col-span-2">
+                            className="flex items-center justify-center col-span-2 bg-destructive">
                             <Trash 
                                 className= "hover:cursor-pointer">
                             </Trash>

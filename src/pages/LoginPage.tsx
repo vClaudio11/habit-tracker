@@ -8,6 +8,7 @@ import { Mail } from 'lucide-react';
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
+import { useState } from "react"
 
 interface LoginPageProps {
     onLogin: () => void
@@ -16,7 +17,8 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }: LoginPageProps) {
-
+    const [error, setError] = useState('')
+    
     async function handleLogin(values: z.infer<typeof formSchema>) {
         const url = `${import.meta.env.VITE_API_URL}/auth/login`
         const requestOptions = {
@@ -25,15 +27,28 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }:
             body: JSON.stringify(values)
         }
         try {
-            const response = await fetch(url, requestOptions) 
+            const response = await fetch(url, requestOptions)
+            if (response.status === 401) {
+                setError('Invalid email or password')
+                throw new Error ('Invalid email or password')
+            }
+            
             if (!response.ok) {
+                setError('An error occurred while trying to login')
                 throw new Error('Invalid')
             }
+
             const data = await response.json()
-            localStorage.setItem('token', data.token)
-            onLogin()
-        } catch(error) {
-            return `Something went wrong: ${error}`
+            if (data.token) {
+                localStorage.setItem('token', data.token)
+                onLogin()
+            } else {
+                setError('Invalid email or password')
+            }
+
+        } catch(err) {
+            setError(`${err}`.split(':')[1])
+            return 
         }
 
     }
@@ -85,7 +100,9 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }:
                                             autoComplete="off"
                                         />
                                         {fieldState.invalid && (
-                                            <FieldError errors={[fieldState.error]}/>
+                                            <FieldError 
+                                                className="mr-2"
+                                                errors={[fieldState.error]}/>
                                         )}
                                         <InputGroupAddon>
                                             <Mail />
@@ -122,13 +139,18 @@ export default function LoginPage({ onLogin, onPasswordChange, onSignInSwitch }:
                             )}
                         />
                         <Field>
-                            <Button 
+                            <Button
                                 variant="default"
                                 type="submit" 
                                 form="loginForm">
                                 Log in
                             </Button>
                         </Field>
+                        {error && (                  
+                            <div className="w-full text-center">
+                                <p className="text-destructive">{error}</p>
+                            </div>
+                        )}
                         <Field>
                             <Label className="flex flex-row justify-center text-center">
                                 Don't have an account yet? <span 

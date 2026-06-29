@@ -187,11 +187,17 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
 
 
   function toggleHabit(id: number) {
-    dispatch({ type: "TOGGLE_HABIT", payload: id})
+
+    const habitTodo = habits.find(h => h.id === id)
     
     // calculate number of completed before state loads
     const nextHabits = habits.map(h => h.id === id ? { ...h, completed: !h.completed } : h)
     const newCompleted = nextHabits.filter(h => h.completed).length
+
+    // add guard rail for habits.find returning undefined or DNE
+    if (habitTodo) {
+      updateTodo(id, habitTodo)
+    }
 
     updateLog(newCompleted, nextHabits.length)
   }
@@ -214,6 +220,20 @@ export default function HabitPage({ onLogout }: HabitPageProps) {
     setWeeklyLog(prev => prev.map(d => d.date === today ? data : d))
   }
 
+  async function updateTodo(id: number, habit: Habit) {
+    const token = localStorage.getItem('token')
+
+    // ensure checked state throughout the day remains checked
+    await fetch(`${import.meta.env.VITE_API_URL}/habits/${id}/checked`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`    
+      },
+      body: JSON.stringify({ completed: !habit.completed })
+    })
+    dispatch({ type: "TOGGLE_HABIT", payload: id})
+  }
 
 
   function handleLogout() {
